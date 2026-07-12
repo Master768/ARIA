@@ -20,8 +20,10 @@ ENV/
 # Agent caches and logs
 logs/
 reports/*.md
-!reports/manifest.json
+reports/*.json
+reports/*.docx
 reports/manifest.json
+config/task_state.json
 sandbox/temp_query.py
 .agent/
 .agents/

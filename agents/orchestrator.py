@@ -353,6 +353,13 @@ class OrchestratorAgent:
                         continue
                 break
             
+            # Save Critic validation details into task state
+            task["critic_code"] = critic_res.code
+            task["critic_output"] = critic_res.output
+            task["critic_value"] = critic_res.critic_value
+            task["critic_diff"] = critic_res.diff
+            task["critic_status_msg"] = critic_res.status
+
             if critic_res.is_valid:
                 task["critic_validation"] = "PASSED"
                 task["status"] = "COMPLETE"

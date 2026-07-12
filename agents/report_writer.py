@@ -2,6 +2,10 @@ import os
 import json
 from datetime import datetime
 import docx
+from docx.shared import Inches, Pt, RGBColor
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.oxml import OxmlElement, parse_xml
+from docx.oxml.ns import nsdecls, qn
 
 class ReportWriter:
     def __init__(self):
@@ -68,6 +72,12 @@ class ReportWriter:
         # Save markdown report
         with open(file_path, "w", encoding="utf-8") as f:
             f.write(md_content)
+
+        # Save task state copy
+        state_file_name = f"{timestamp_str}_{topic_slug}_state.json"
+        state_file_path = os.path.join(self.reports_dir, state_file_name)
+        with open(state_file_path, "w", encoding="utf-8") as f:
+            json.dump(task_state, f, indent=2)
             
         # Register draft in manifest.json
         manifest = self._load_manifest()
@@ -80,6 +90,7 @@ class ReportWriter:
             "status": "DRAFT",
             "validation_status": task_state.get("status"), # COMPLETE / NEEDS_REVIEW
             "md_path": file_name,
+            "state_path": state_file_name,
             "docx_path": None
         })
         self._save_manifest(manifest)
@@ -88,11 +99,110 @@ class ReportWriter:
 
     def convert_to_docx(self, markdown_content: str, docx_path: str):
         """
-        Parses Markdown content and writes a professionally styled Word document.
+        Parses Markdown content and writes a professionally styled Word document
+        with custom page margins, typography, headers, footers, and a metadata banner.
         """
         doc = docx.Document()
         
-        # Define basic styling helper for bold markers
+        # 1. Page Setup: 1 inch margins all around
+        for section in doc.sections:
+            section.top_margin = Inches(1)
+            section.bottom_margin = Inches(1)
+            section.left_margin = Inches(1)
+            section.right_margin = Inches(1)
+            
+        # 2. Configure Typography Styles
+        # Normal (Body Text)
+        style_normal = doc.styles['Normal']
+        font_normal = style_normal.font
+        font_normal.name = 'Calibri'
+        font_normal.size = Pt(11)
+        font_normal.color.rgb = RGBColor(0x33, 0x33, 0x33)
+        style_normal.paragraph_format.line_spacing = 1.15
+        style_normal.paragraph_format.space_after = Pt(6)
+        
+        # Headings
+        style_h1 = doc.styles['Heading 1']
+        font_h1 = style_h1.font
+        font_h1.name = 'Calibri'
+        font_h1.size = Pt(20)
+        font_h1.bold = True
+        font_h1.color.rgb = RGBColor(0x1F, 0x4E, 0x79) # Navy Blue
+        style_h1.paragraph_format.space_before = Pt(12)
+        style_h1.paragraph_format.space_after = Pt(6)
+        
+        style_h2 = doc.styles['Heading 2']
+        font_h2 = style_h2.font
+        font_h2.name = 'Calibri'
+        font_h2.size = Pt(14)
+        font_h2.bold = True
+        font_h2.color.rgb = RGBColor(0x2E, 0x75, 0xB6) # Steel Blue
+        style_h2.paragraph_format.space_before = Pt(12)
+        style_h2.paragraph_format.space_after = Pt(4)
+        
+        style_h3 = doc.styles['Heading 3']
+        font_h3 = style_h3.font
+        font_h3.name = 'Calibri'
+        font_h3.size = Pt(12)
+        font_h3.bold = True
+        font_h3.color.rgb = RGBColor(0x59, 0x59, 0x59) # Dark Gray
+        style_h3.paragraph_format.space_before = Pt(6)
+        style_h3.paragraph_format.space_after = Pt(2)
+
+        # 3. Parse Metadata for Banner Table
+        title = "Data Analysis Report"
+        date_str = datetime.now().strftime("%Y-%m-%d")
+        status_str = "APPROVED"
+        
+        lines = markdown_content.splitlines()
+        for line in lines:
+            line_strip = line.strip()
+            if line_strip.startswith("# "):
+                title = line_strip[2:]
+            elif line_strip.startswith("**Date:**"):
+                date_str = line_strip[9:].strip().replace("**", "")
+            elif line_strip.startswith("**Status:**"):
+                status_str = line_strip[11:].strip().replace("**", "")
+
+        # 4. Create Metadata Banner Table (1 row, 2 columns)
+        table = doc.add_table(rows=1, cols=2)
+        table.autofit = False
+        table.columns[0].width = Inches(4.5)
+        table.columns[1].width = Inches(2.0)
+        
+        # Shade and Border cells
+        def set_cell_shading(cell, color_hex):
+            shd_elm = parse_xml(f'<w:shd {nsdecls("w")} w:fill="{color_hex}"/>')
+            cell._tc.get_or_add_tcPr().append(shd_elm)
+            
+        def set_cell_left_border(cell, color_hex, size="36"):
+            tcBorders = parse_xml(f'<w:tcBorders {nsdecls("w")}><w:left w:val="single" w:sz="{size}" w:space="0" w:color="{color_hex}"/></w:tcBorders>')
+            cell._tc.get_or_add_tcPr().append(tcBorders)
+
+        cell_left = table.cell(0, 0)
+        cell_right = table.cell(0, 1)
+        
+        set_cell_shading(cell_left, "F2F5F8")
+        set_cell_shading(cell_right, "F2F5F8")
+        set_cell_left_border(cell_left, "1F4E79", size="36")
+        
+        p_title = cell_left.paragraphs[0]
+        run_title = p_title.add_run(title)
+        run_title.font.size = Pt(16)
+        run_title.font.bold = True
+        run_title.font.color.rgb = RGBColor(0x1F, 0x4E, 0x79)
+        
+        p_meta = cell_right.paragraphs[0]
+        p_meta.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+        p_meta.add_run("DATE:\n").bold = True
+        p_meta.add_run(f"{date_str}\n\n")
+        p_meta.add_run("STATUS:\n").bold = True
+        p_meta.add_run(status_str).font.color.rgb = RGBColor(0x10, 0x7C, 0x41) if status_str == "APPROVED" else RGBColor(0xA6, 0x1C, 0x1C)
+        
+        # Spacing element
+        doc.add_paragraph().paragraph_format.space_before = Pt(12)
+
+        # 5. Populate Document Content
         def add_formatted_paragraph(doc, text, style=None):
             p = doc.add_paragraph(style=style)
             parts = text.split("**")
@@ -101,24 +211,39 @@ class ReportWriter:
                 p.add_run(part).bold = is_bold
             return p
 
-        lines = markdown_content.splitlines()
         for line in lines:
             line_strip = line.strip()
             if not line_strip:
                 continue
                 
-            if line_strip.startswith("# "):
-                doc.add_heading(line_strip[2:], level=1)
-            elif line_strip.startswith("## "):
+            # Skip metadata items that were placed in the banner
+            if line_strip.startswith("# ") or line_strip.startswith("**Date:**") or line_strip.startswith("**Status:**"):
+                continue
+                
+            if line_strip.startswith("## "):
                 doc.add_heading(line_strip[3:], level=2)
             elif line_strip.startswith("### "):
                 doc.add_heading(line_strip[4:], level=3)
             elif line_strip.startswith("- ") or line_strip.startswith("* "):
-                # bullet item
                 add_formatted_paragraph(doc, line_strip[2:], style="List Bullet")
             else:
                 add_formatted_paragraph(doc, line_strip)
                 
+        # 6. Add Footer
+        for section in doc.sections:
+            footer = section.footer
+            f_p = footer.paragraphs[0]
+            f_p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+            f_run = f_p.add_run("Orchestra Analytics Report Studio  |  Confidential  |  Page ")
+            f_run.font.size = Pt(9)
+            f_run.font.italic = True
+            f_run.font.color.rgb = RGBColor(0x7F, 0x7F, 0x7F)
+            
+            # XML page number field
+            fldSimple = OxmlElement('w:fldSimple')
+            fldSimple.set(qn('w:instr'), 'PAGE')
+            f_p._p.append(fldSimple)
+
         doc.save(docx_path)
 
     def update_manifest_status(self, draft_filename: str, new_status: str, new_filename: str = None, docx_filename: str = None):
