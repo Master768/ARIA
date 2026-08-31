@@ -1,0 +1,66 @@
+{
+  "filepath": "C:\\Users\\Ravin\\AppData\\Local\\Temp\\pytest-of-Ravin\\pytest-20\\test_dataset_profile_store0\\sample_players.csv",
+  "filename": "sample_players.csv",
+  "sha256": "7ca02efdf78d420402b49e11717bb5d48d508e1609c209ad356449fb671710d6",
+  "shape": [
+    4,
+    4
+  ],
+  "columns": [
+    "player_name",
+    "goals",
+    "assists",
+    "rating"
+  ],
+  "numeric_columns": [
+    "goals",
+    "assists",
+    "rating"
+  ],
+  "categorical_columns": [
+    "player_name"
+  ],
+  "dtypes": {
+    "player_name": "object",
+    "goals": "int64",
+    "assists": "int64",
+    "rating": "float64"
+  },
+  "null_counts": {
+    "player_name": 0,
+    "goals": 0,
+    "assists": 0,
+    "rating": 0
+  },
+  "summary_stats": {
+    "goals": {
+      "mean": 12.75,
+      "std": 2.217355782608345,
+      "min": 10.0,
+      "50%": 13.0,
+      "max": 15.0
+    },
+    "assists": {
+      "mean": 4.5,
+      "std": 2.6457513110645907,
+      "min": 2.0,
+      "50%": 4.0,
+      "max": 8.0
+    },
+    "rating": {
+      "mean": 9.05,
+      "std": 0.20816659994661324,
+      "min": 8.8,
+      "50%": 9.05,
+      "max": 9.3
+    }
+  },
+  "categorical_summary": {
+    "player_name": {
+      "Lionel Messi": 1,
+      "Cristiano Ronaldo": 1,
+      "Kylian Mbappe": 1,
+      "Erling Haaland": 1
+    }
+  }
+}

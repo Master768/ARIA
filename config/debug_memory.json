@@ -1,0 +1,5 @@
+{
+  "patterns": {
+    "5fb5d0aecc88736d2fcea3dc35c818493478005b1dc659cdda93505dbd047188": "import pandas as pd\ndf = pd.read_csv('C:/Users/Ravin/AppData/Local/Temp/pytest-of-Ravin/pytest-36/test_enterprise_debug_agent_de0/players.csv')\nprint(df['performance_score'])"
+  }
+}

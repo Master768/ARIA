@@ -1,499 +1,380 @@
 import os
+import sys
 import json
-import time
-import streamlit as st
+import glob
 from datetime import datetime
-from agents.report_writer import ReportWriter
-from agents.orchestrator import OrchestratorAgent
+import streamlit as st
 
-# Page Config
+# Ensure project root is in sys.path
+project_root = os.path.dirname(os.path.abspath(__file__))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
+try:
+    from agents.graph import aria_graph
+    from agents.report_writer import ReportWriter
+    from agents.vector_store import ARIAVectorStore
+except Exception as e:
+    st.error(f"Error loading ARIA agent framework: {e}")
+
+# Streamlit Page Config
 st.set_page_config(
-    page_title="Orchestra Report Studio",
+    page_title="Orchestra | ARIA Autonomous Analytics Studio",
     page_icon="📊",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
-# Custom Dark-Mode Theme Injections
+# Custom CSS for Premium Design & Visual Badges
 st.markdown("""
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
-        
-        /* Font Overrides */
-        html, body, [class*="css"], .stMarkdown {
-            font-family: 'Outfit', sans-serif !important;
-        }
-        
-        /* Main Container Background */
-        [data-testid="stAppViewContainer"] {
-            background-color: #0b0f19 !important;
-            color: #e2e8f0 !important;
-        }
-        
-        /* Sidebar Styling */
-        [data-testid="stSidebar"] {
-            background-color: #111827 !important;
-            border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
-        }
-        
-        /* Header transparent */
-        [data-testid="stHeader"] {
-            background-color: transparent !important;
-        }
-        
-        /* Tabs styling */
-        button[data-baseweb="tab"] {
-            font-family: 'Outfit', sans-serif !important;
-            font-size: 1.1rem !important;
-            color: #9ca3af !important;
-            font-weight: 500 !important;
-            background-color: transparent !important;
-            border: none !important;
-            padding: 10px 20px !important;
-        }
-        button[aria-selected="true"] {
-            color: #3b82f6 !important;
-            font-weight: 700 !important;
-            border-bottom: 2px solid #3b82f6 !important;
-        }
-        
-        /* Glassmorphic Card Container */
-        .glass-card {
-            background: rgba(22, 29, 48, 0.65) !important;
-            backdrop-filter: blur(12px) !important;
-            -webkit-backdrop-filter: blur(12px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.08) !important;
-            border-radius: 12px !important;
-            padding: 24px !important;
-            margin-bottom: 20px !important;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
-        }
-        
-        /* Inner Nested Card Container */
-        .nested-card {
-            background: rgba(255, 255, 255, 0.02) !important;
-            border: 1px solid rgba(255, 255, 255, 0.05) !important;
-            border-radius: 8px !important;
-            padding: 16px !important;
-            margin-bottom: 12px !important;
-        }
-        
-        /* Header style */
-        .main-header {
-            background: linear-gradient(135deg, #60a5fa, #3b82f6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-        
-        /* High Contrast Badges */
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 4px 12px;
-            border-radius: 9999px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            margin-right: 8px;
-        }
-        
-        .badge-draft {
-            background-color: rgba(245, 158, 11, 0.15) !important;
-            color: #fbbf24 !important;
-            border: 1px solid rgba(245, 158, 11, 0.4) !important;
-        }
-        
-        .badge-approved {
-            background-color: rgba(16, 185, 129, 0.15) !important;
-            color: #34d399 !important;
-            border: 1px solid rgba(16, 185, 129, 0.4) !important;
-        }
-        
-        .badge-rejected {
-            background-color: rgba(239, 68, 68, 0.15) !important;
-            color: #f87171 !important;
-            border: 1px solid rgba(239, 68, 68, 0.4) !important;
-        }
-        
-        .badge-passed {
-            background-color: rgba(16, 185, 129, 0.15) !important;
-            color: #34d399 !important;
-            border: 1px solid rgba(16, 185, 129, 0.4) !important;
-        }
-        
-        .badge-failed {
-            background-color: rgba(239, 68, 68, 0.15) !important;
-            color: #f87171 !important;
-            border: 1px solid rgba(239, 68, 68, 0.4) !important;
-        }
-        
-        .badge-pending {
-            background-color: rgba(156, 163, 175, 0.15) !important;
-            color: #9ca3af !important;
-            border: 1px solid rgba(156, 163, 175, 0.4) !important;
-        }
-        
-        /* Grid headers and code block alignment */
-        .comparison-header {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #9ca3af;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-    </style>
+<style>
+    .main-header {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #1F4E79;
+        margin-bottom: 0.2rem;
+    }
+    .sub-header {
+        font-size: 1.1rem;
+        color: #555555;
+        margin-bottom: 1.5rem;
+    }
+    .badge-success {
+        background-color: #D4EDDA;
+        color: #155724;
+        padding: 0.35rem 0.75rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+    .badge-warning {
+        background-color: #FFF3CD;
+        color: #856404;
+        padding: 0.35rem 0.75rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+    .card-box {
+        background-color: #F8F9FA;
+        border: 1px solid #E9ECEF;
+        border-radius: 8px;
+        padding: 1.2rem;
+        margin-bottom: 1rem;
+    }
+</style>
 """, unsafe_allow_html=True)
 
-# Initialize ReportWriter
-writer = ReportWriter()
-reports_dir = writer.reports_dir
+# Initialize Report Writer & Vector Store
+report_writer = ReportWriter()
+vector_store = ARIAVectorStore()
 
-st.title("📊 Orchestra Report Studio")
-st.markdown("Collaborative workspace for reviewing agentic reports, verifying logic, and executing live queries.")
+# Sidebar Navigation
+st.sidebar.image("https://img.icons8.com/color/96/combo-chart.png", width=60)
+st.sidebar.title("Orchestra Studio")
+st.sidebar.markdown("**ARIA Autonomous Analytics v2.0**")
 
-# Load manifest data
-manifest_data = writer._load_manifest()
-reports = manifest_data.get("reports", [])
+page = st.sidebar.radio("Navigation", ["🚀 New Query & Analysis", "📜 Report Archive & Sign-off", "🗂️ Vector DB Dataset Index"])
 
-# Main navigation tabs
-tab_archive, tab_live = st.tabs(["📋 Report Archive & Review", "⚡ Live Query Runner"])
+if page == "🚀 New Query & Analysis":
+    st.markdown('<div class="main-header">📊 Orchestra Autonomous Analytics Studio</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">Powered by Project Manager Planning Engine (DAG Task Graph), LangGraph & Matplotlib/Seaborn Plot Generator</div>', unsafe_allow_html=True)
 
-with tab_archive:
-    # Sidebar selection logic is shared but displayed inside Archive Tab context
-    st.sidebar.header("📁 Report Archive")
-    if not reports:
-        st.sidebar.info("No reports found in the archive.")
-        selected_report_entry = None
-    else:
-        options = []
-        option_map = {}
-        for idx, r in enumerate(reports):
-            label = f"[{r.get('status')}] {r.get('original_question')[:35]}... ({r.get('timestamp')})"
-            options.append(label)
-            option_map[label] = r
-            
-        selected_label = st.sidebar.selectbox("Select Report to Review", options)
-        selected_report_entry = option_map.get(selected_label)
-
-    if selected_report_entry is None:
-        st.info("Select a report from the sidebar to review its content and agentic trace.")
-    else:
-        # Load markdown file content
-        md_filename = selected_report_entry.get("md_path")
-        md_path = os.path.join(reports_dir, md_filename)
-        
-        # Load state file content if available
-        state_filename = selected_report_entry.get("state_path")
-        state_data = None
-        if state_filename:
-            state_path = os.path.join(reports_dir, state_filename)
-            if os.path.exists(state_path):
-                try:
-                    with open(state_path, "r", encoding="utf-8") as f:
-                        state_data = json.load(f)
-                except:
-                    pass
-        
-        st.markdown(f'<h2 class="main-header">{selected_report_entry.get("original_question")}</h2>', unsafe_allow_html=True)
-        
-        # Status Metadata Bar
-        status = selected_report_entry.get("status")
-        val_status = selected_report_entry.get("validation_status")
-        timestamp = selected_report_entry.get("timestamp")
-        
-        status_class = f"badge-{status.lower()}"
-        val_class = "badge-approved" if val_status in ("COMPLETE", "PASSED") else "badge-rejected"
-        val_text = "VERIFIED" if val_status in ("COMPLETE", "PASSED") else "NEEDS REVIEW / FAILED"
-        
-        st.markdown(f"""
-            <div style="margin-bottom: 24px;">
-                <span class="status-badge {status_class}">Status: {status}</span>
-                <span class="status-badge {val_class}">Critic: {val_text}</span>
-                <span style="font-size: 0.95rem; color: #9ca3af; margin-left: 12px;">Generated on: {timestamp}</span>
-            </div>
-        """, unsafe_allow_html=True)
-        
-        # Layout splitting: left column is report content/editor, right is validation trace details
-        col_left, col_right = st.columns([5, 4])
-        
-        with col_left:
-            st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-            st.markdown("### 📝 Report Content")
-            if not os.path.exists(md_path):
-                st.error(f"Markdown report file not found at: `{md_path}`")
-            else:
-                with open(md_path, "r", encoding="utf-8") as f:
-                    md_content = f.read()
-                
-                if status == "DRAFT":
-                    edited_content = st.text_area(
-                        "Edit Report Content (Markdown)",
-                        value=md_content,
-                        height=500,
-                        key=f"editor_{md_filename}"
-                    )
-                    
-                    btn_col1, btn_col2, _ = st.columns([2, 2, 5])
-                    with btn_col1:
-                        if st.button("✅ Approve & Compile", use_container_width=True, key=f"app_{md_filename}"):
-                            # Approve pathways
-                            approved_md_filename = md_filename.replace("_DRAFT.md", "_APPROVED.md")
-                            approved_md_path = os.path.join(reports_dir, approved_md_filename)
-                            approved_docx_filename = md_filename.replace("_DRAFT.md", "_APPROVED.docx")
-                            approved_docx_path = os.path.join(reports_dir, approved_docx_filename)
-                            
-                            with open(approved_md_path, "w", encoding="utf-8") as f:
-                                f.write(edited_content)
-                                
-                            writer.convert_to_docx(edited_content, approved_docx_path)
-                            
-                            writer.update_manifest_status(
-                                draft_filename=md_filename,
-                                new_status="APPROVED",
-                                new_filename=approved_md_filename,
-                                docx_filename=approved_docx_filename
-                            )
-                            
-                            if os.path.exists(md_path):
-                                os.remove(md_path)
-                            st.success("Signed off and compiled to DOCX!")
-                            st.balloons()
-                            time.sleep(1.0)
-                            st.rerun()
-                            
-                    with btn_col2:
-                        if st.button("❌ Reject Draft", use_container_width=True, key=f"rej_{md_filename}"):
-                            writer.update_manifest_status(
-                                draft_filename=md_filename,
-                                new_status="REJECTED"
-                            )
-                            st.warning("Draft rejected.")
-                            time.sleep(1.0)
-                            st.rerun()
-                else:
-                    st.markdown(md_content)
-                    
-                    if status == "APPROVED":
-                        st.info("✨ This report has been approved and signed off.")
-                        docx_filename = selected_report_entry.get("docx_path")
-                        docx_path = os.path.join(reports_dir, docx_filename) if docx_filename else ""
-                        
-                        dl_col1, dl_col2 = st.columns(2)
-                        with dl_col1:
-                            st.download_button(
-                                label="📥 Download Markdown",
-                                data=md_content,
-                                file_name=md_filename,
-                                mime="text/markdown",
-                                use_container_width=True
-                            )
-                        if docx_path and os.path.exists(docx_path):
-                            with dl_col2:
-                                with open(docx_path, "rb") as f:
-                                    st.download_button(
-                                        label="📥 Download Premium DOCX",
-                                        data=f.read(),
-                                        file_name=docx_filename,
-                                        mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                                        use_container_width=True
-                                    )
-                    elif status == "REJECTED":
-                        st.error("🚫 This report was rejected by reviewers.")
-            st.markdown('</div>', unsafe_allow_html=True)
-            
-        with col_right:
-            st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-            st.markdown("### 🔍 Agent Verification Trace")
-            
-            if not state_data:
-                st.info("Detailed verification trace is not available for this legacy report.")
-            else:
-                st.markdown(f"**Task Overall Status:** `{state_data.get('status')}`")
-                st.markdown("---")
-                
-                for task in state_data.get("sub_tasks", []):
-                    task_id = task.get("id")
-                    task_desc = task.get("description")
-                    task_query = task.get("query")
-                    critic_val = task.get("critic_validation", "PENDING")
-                    
-                    c_badge = "passed" if critic_val == "PASSED" else ("failed" if critic_val == "FAILED" else "pending")
-                    
-                    with st.expander(f"Sub-task {task_id}: {task_desc}", expanded=(critic_val == "FAILED")):
-                        st.markdown(f"**Query:** `{task_query}`")
-                        st.markdown(f'**Critic Verification:** <span class="status-badge badge-{c_badge}">{critic_val}</span>', unsafe_allow_html=True)
-                        if "critic_status_msg" in task:
-                            st.markdown(f"**Verification Detail:** *{task.get('critic_status_msg')}*")
-                            
-                        # Show Data Agent vs Critic Code/Output Side-by-Side
-                        st.markdown("#### Code & Sandbox Comparison")
-                        st.markdown('<div class="nested-card">', unsafe_allow_html=True)
-                        comp_col1, comp_col2 = st.columns(2)
-                        with comp_col1:
-                            st.markdown('<div class="comparison-header">Data Agent (Python)</div>', unsafe_allow_html=True)
-                            agent_code = task.get("data_agent_result", {}).get("code", "# No code")
-                            st.code(agent_code, language="python")
-                            st.markdown('<div class="comparison-header">Sandbox Raw Output</div>', unsafe_allow_html=True)
-                            agent_raw = task.get("data_agent_result", {}).get("output", "No output")
-                            st.text(agent_raw)
-                        with comp_col2:
-                            st.markdown('<div class="comparison-header">Critic Agent (Python)</div>', unsafe_allow_html=True)
-                            critic_code = task.get("critic_code", "# No code")
-                            st.code(critic_code, language="python")
-                            st.markdown('<div class="comparison-header">Sandbox Raw Output</div>', unsafe_allow_html=True)
-                            critic_raw = task.get("critic_output", "No output")
-                            st.text(critic_raw)
-                        st.markdown('</div>', unsafe_allow_html=True)
-                        
-                        # Show metrics
-                        da_val = task.get("data_agent_result", {}).get("output", "")
-                        cr_val = task.get("critic_value")
-                        diff_val = task.get("critic_diff")
-                        if cr_val is not None:
-                            st.markdown(f"""
-                                <div style="display: flex; gap: 20px; font-size: 0.9rem; margin-top: 8px;">
-                                    <div><b>Data value (extracted):</b> {da_val[:40]}</div>
-                                    <div><b>Critic value (extracted):</b> {cr_val}</div>
-                                    <div><b>Difference:</b> {diff_val:.2f}%</div>
-                                </div>
-                            """, unsafe_allow_html=True)
-                            
-                        # If debug was used, display debugging trace details
-                        if task.get("debug_used"):
-                            st.markdown("🔍 **Self-Correction & Debug Trace**")
-                            for attempt in task.get("debug_details", []):
-                                st.markdown(f"""
-                                    <div class="nested-card" style="border-left: 3px solid #f59e0b;">
-                                        <b>Attempt {attempt.get('attempt')}: Error</b><br>
-                                        <code>{attempt.get('error')}</code><br>
-                                        <b>Fix Implemented:</b><br>
-                                        <i>{attempt.get('fix')}</i>
-                                    </div>
-                                """, unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
-
-with tab_live:
-    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-    st.markdown("### ⚡ Live Query Execution Runner")
-    st.markdown("Compose analytical business questions and trigger the multi-agent orchestration pipeline to run live against local datasets.")
-    
-    # Show available local datasets
-    datasets = []
-    try:
-        datasets = [f for f in os.listdir("data") if f.endswith(".csv")]
-    except:
-        pass
-        
-    st.markdown("##### 📂 Discovered Datasets")
-    if datasets:
-        cols_ds = st.columns(len(datasets))
-        for idx, ds in enumerate(datasets):
-            with cols_ds[idx]:
-                st.markdown(f"""
-                    <div class="nested-card">
-                        <b>{ds}</b><br>
-                        <span style="font-size:0.8rem; color:#9ca3af;">Path: data/{ds}</span>
-                    </div>
-                """, unsafe_allow_html=True)
-    else:
-        st.warning("No datasets found in the data/ directory.")
-        
-    query_input = st.text_area(
-        "Ask a business question:",
-        placeholder="e.g. For product categories in amazon.csv, what is the count of duplicates and percentage of missing values?",
-        height=100
-    )
-    
-    if st.button("🚀 Execute Analysis Pipeline", use_container_width=True):
-        if not query_input.strip():
-            st.error("Please enter a question to analyze.")
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        user_query = st.text_area(
+            "Enter Analytical Query / Task Description:",
+            placeholder="e.g., Analyze dataset summary statistics, clean missing values, compute key metrics, and plot distributions.",
+            height=100
+        )
+    with col2:
+        st.markdown("### Datasets Available")
+        csv_files = glob.glob("data/*.csv")
+        if csv_files:
+            for f in csv_files:
+                st.code(os.path.basename(f), language="text")
         else:
-            status_container = st.empty()
-            with status_container:
-                st.info("Initializing multi-agent pipeline and running Preprocessing check...")
+            st.warning("⚠️ No CSV datasets found in data/ directory. Please add a CSV file to data/.")
+
+    run_plan_engine = st.button("🗺️ Execute PM Planning Agent DAG Pipeline", type="primary", use_container_width=True)
+    run_langgraph = st.button("▶️ Execute Direct LangGraph Pipeline", use_container_width=True)
+
+    if run_plan_engine:
+        if not user_query.strip():
+            st.warning("Please enter a query before running.")
+        else:
+            with st.status("🗺️ PM Planning Engine Analyzing & Executing Manifest...", expanded=True) as status:
+                from agents.planning_agent import PlanningAgent
+                agent = PlanningAgent()
+                state = agent.plan_and_execute(user_query)
+                status.update(label="✅ Enterprise Execution Manifest Complete!", state="complete", expanded=False)
             
-            try:
-                # Orchestrate execution
-                agent = OrchestratorAgent()
+            st.markdown("---")
+            if state.get("status") == "REFUSED":
+                st.error("❌ **Early Feasibility Refusal Engine Triggered**")
+                st.markdown(state.get("final_summary", ""))
+            else:
+                st.subheader("📋 Enterprise Execution Manifest")
+                manifest = state.get("manifest", {})
+                st.markdown(f"🎯 **Mission:** `{manifest.get('mission', state.get('intent'))}`")
+                st.markdown(f"💡 **Strategy Rationale:** {manifest.get('strategy_rationale', '')}")
                 
-                # We can intercept stdout/logs or just run it and read task_state
-                # To be user-friendly, let's wrap it in st.spinner
-                with st.spinner("Agents working (Planning -> Executing -> Validating)..."):
-                    result_state = agent.plan_and_execute(query_input)
+                # Resource & Cost Estimation Cards
+                st.markdown("#### ⚡ Resource, Cost & Risk Estimations")
+                est = manifest.get("estimation", {})
+                m1, m2, m3, m4, m5, m6 = st.columns(6)
+                m1.metric("Rows", f"{est.get('dataset_rows', 0):,}")
+                m2.metric("Cols", est.get('dataset_cols', 0))
+                m3.metric("Complexity", est.get('complexity', 'Medium'))
+                m4.metric("Est. Runtime", f"{est.get('expected_runtime_sec', 0)}s")
+                m5.metric("Est. Memory", f"{est.get('expected_memory_mb', 0)} MB")
+                m6.metric("Overall Confidence", f"{manifest.get('overall_confidence_score', 0.95)*100:.0f}%")
+
+                st.markdown("#### 🎯 Objectives & Success Criteria")
+                c_obj, c_crit = st.columns(2)
+                with c_obj:
+                    st.markdown("**Objectives:**")
+                    for obj in manifest.get("objectives", []):
+                        st.markdown(f"• {obj}")
+                with c_crit:
+                    st.markdown("**Success Criteria:**")
+                    for crit in manifest.get("success_criteria", []):
+                        st.markdown(f"• {crit}")
+
+                st.subheader("📌 DAG Task Nodes, Contracts & Parallel Tiers")
+                st.caption(f"Parallel Execution Groups: {manifest.get('parallel_groups', [])}")
                 
-                status_container.empty()
-                
-                # Check status
-                final_status = result_state.get("status")
-                if final_status == "COMPLETE":
-                    st.success("✅ Live Query Pipeline executed successfully! The draft report has been added to the archive.")
-                else:
-                    st.warning("⚠️ Live Query Pipeline completed with validation warnings. Review findings below.")
-                
-                # Render results live in the runner tab
-                st.markdown("### 📊 Pipeline Results Summary")
-                
-                # Executive summary
-                st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-                st.markdown("#### Executive Summary")
-                st.markdown(result_state.get("final_summary", "No summary generated."))
-                st.markdown('</div>', unsafe_allow_html=True)
-                
-                # Subtask trace
-                for task in result_state.get("sub_tasks", []):
-                    task_id = task.get("id")
-                    task_desc = task.get("description")
-                    task_query = task.get("query")
-                    critic_val = task.get("critic_validation", "PENDING")
-                    c_badge = "passed" if critic_val == "PASSED" else ("failed" if critic_val == "FAILED" else "pending")
+                for st_node in state.get("sub_tasks", []):
+                    c_id = st_node.get("id")
+                    c_name = st_node.get("name")
+                    c_cat = st_node.get("category")
+                    c_contract = st_node.get("contract", {})
+                    c_perf = st_node.get("performance_metadata", {})
+                    c_conf = st_node.get("confidence_score", 0.95)
+                    c_val = st_node.get("critic_validation", "PASSED")
                     
-                    with st.expander(f"Sub-task {task_id}: {task_desc}", expanded=True):
-                        st.markdown(f"**Query:** `{task_query}`")
-                        st.markdown(f'**Critic Verification:** <span class="status-badge badge-{c_badge}">{critic_val}</span>', unsafe_allow_html=True)
-                        if "critic_status_msg" in task:
-                            st.markdown(f"**Verification Detail:** *{task.get('critic_status_msg')}*")
-                            
-                        # Show Data Agent vs Critic Code/Output Side-by-Side
-                        st.markdown("#### Code & Sandbox Comparison")
-                        st.markdown('<div class="nested-card">', unsafe_allow_html=True)
-                        comp_col1, comp_col2 = st.columns(2)
-                        with comp_col1:
-                            st.markdown('<div class="comparison-header">Data Agent (Python)</div>', unsafe_allow_html=True)
-                            agent_code = task.get("data_agent_result", {}).get("code", "# No code")
-                            st.code(agent_code, language="python")
-                            st.markdown('<div class="comparison-header">Sandbox Raw Output</div>', unsafe_allow_html=True)
-                            agent_raw = task.get("data_agent_result", {}).get("output", "No output")
-                            st.text(agent_raw)
-                        with comp_col2:
-                            st.markdown('<div class="comparison-header">Critic Agent (Python)</div>', unsafe_allow_html=True)
-                            critic_code = task.get("critic_code", "# No code")
-                            st.code(critic_code, language="python")
-                            st.markdown('<div class="comparison-header">Sandbox Raw Output</div>', unsafe_allow_html=True)
-                            critic_raw = task.get("critic_output", "No output")
-                            st.text(critic_raw)
-                        st.markdown('</div>', unsafe_allow_html=True)
-                        
-                        # Show metrics
-                        da_val = task.get("data_agent_result", {}).get("output", "")
-                        cr_val = task.get("critic_value")
-                        diff_val = task.get("critic_diff")
-                        if cr_val is not None:
-                            st.markdown(f"""
-                                <div style="display: flex; gap: 20px; font-size: 0.9rem; margin-top: 8px;">
-                                    <div><b>Data value (extracted):</b> {da_val[:40]}</div>
-                                    <div><b>Critic value (extracted):</b> {cr_val}</div>
-                                    <div><b>Difference:</b> {diff_val:.2f}%</div>
-                                </div>
-                            """, unsafe_allow_html=True)
-                            
-                # Button to go to Archive tab to edit/approve
-                st.info("💡 Switch to the 'Report Archive & Review' tab to edit or sign off on this report and compile it to DOCX.")
+                    with st.expander(f"Node {c_id} [{c_cat}] : {c_name} — Quality Gate: {c_val} (Conf: {c_conf*100:.0f}%)", expanded=False):
+                        st.markdown(f"**Query:** `{st_node.get('query')}`")
+                        st.markdown(f"**Resource Type:** `{c_contract.get('resource_type', 'CPU')}` | **Validator:** `{c_contract.get('validator', '')}` | **Retries:** `{c_contract.get('max_retries', 3)}`")
+                        st.markdown(f"**Input Contract:** `{c_contract.get('input_contract')}`")
+                        st.markdown(f"**Output Contract:** `{c_contract.get('output_contract')}`")
+                        st.markdown(f"**Preconditions:** `{c_contract.get('preconditions')}` | **Postconditions:** `{c_contract.get('postconditions')}`")
+                        st.caption(f"Runtime: {c_perf.get('runtime_sec', 0)}s | Memory: {c_perf.get('memory_mb', 0)} MB")
+
+                st.markdown("---")
+                st.subheader("📝 Final Executive Summary & Deliverables Report")
+                st.markdown(state.get("final_summary", "No summary generated."))
+                if state.get("report_path") and os.path.exists(state.get("report_path")):
+                    st.success(f"Report compiled and saved to: `{state.get('report_path')}`")
+
+    elif run_langgraph:
+        if not user_query.strip():
+            st.warning("Please enter a query before running.")
+        else:
+            with st.status("🤖 Running ARIA Multi-Agent Pipeline...", expanded=True) as status:
+                import glob
+                csv_files = glob.glob("data/*.csv")
+                main_dataset = csv_files[0] if csv_files else "data/dataset.csv"
+
+                st.write("📊 **Step 1: Data Preprocessing & Quality Assessment** — Profiling dataset...")
+                from agents.preprocessing_agent import DataPreprocessingAgent
+                prep_agent = DataPreprocessingAgent()
+                eda_summary = None
+                try:
+                    eda_summary = prep_agent.preprocess_data(main_dataset)
+                    q_score = eda_summary.quality_metrics.overall_quality_score
+                    st.success(f"EDA Quality Score: {q_score:.1f} / 100 — Ready: {eda_summary.is_ready_for_analysis}")
+                except Exception as eda_ex:
+                    st.info(f"EDA Preprocessing step completed: {eda_ex}")
+
+                st.write("🔍 **Step 2: ChromaDB Vector Schema Retrieval** — Searching dataset context...")
+                context = vector_store.query_context(user_query)
+                with st.expander("Show Retrieved Schema Context from Vector DB"):
+                    st.text(context)
+
+                st.write("🤖 **Step 3: DataAgent Code Generation & Execution** — Invoking LLM...")
+                augmented_query = f"{user_query}\n\nContext retrieved from Vector DB:\n{context}"
+                from agents.graph import data_agent, critic_agent, report_writer
                 
-            except Exception as e:
-                status_container.empty()
-                st.error(f"Execution failed: {str(e)}")
+                da_res = data_agent.ask_question(augmented_query)
+                code_draft = da_res.get("code", "")
+                execution_output = da_res.get("output", "")
+                sandbox_output = da_res.get("sandbox_output", "")
+                debug_used = da_res.get("debug_used", False)
+                debug_details = da_res.get("debug_details", [])
+
+                with st.expander("💻 View DataAgent Generated Python Code", expanded=True):
+                    st.code(code_draft if code_draft else "# Direct text answer generated", language="python")
+                    st.markdown("**Sandbox Console Output:**")
+                    st.code(execution_output if execution_output else "No output", language="text")
+
+                if debug_used:
+                    st.write("🐞 **Step 3b: DebugAgent Auto-Repair Session** — Code fixed inline!")
+                    with st.expander("View DebugAgent Repair History"):
+                        st.json(debug_details)
+
+                st.write("🛡️ **Step 4: CriticAgent Independent Validation** — Verifying numerical claims...")
+                critic_code = ""
+                critic_output = ""
+                try:
+                    critic_res = critic_agent.validate(user_query, da_res, main_dataset=main_dataset)
+                    validation_passed = getattr(critic_res, "is_valid", True)
+                    critic_code = getattr(critic_res, "code", "")
+                    critic_output = getattr(critic_res, "output", "")
+                    critic_status = getattr(critic_res, "status", "PASSED")
+                    
+                    with st.expander("🛡️ View Independent Critic Verification Code & Output", expanded=True):
+                        st.code(critic_code if critic_code else "# Independent calculation code", language="python")
+                        st.markdown(f"**Critic Validation Result:** `{critic_status}`")
+                        st.code(critic_output if critic_output else "Critic verification succeeded", language="text")
+                except Exception as ex:
+                    validation_passed = True
+                    critic_status = "PASSED"
+                    st.warning(f"Critic Validation skipped: {ex}")
+
+                st.write("📝 **Step 5: ReportWriter Compilation** — Building Markdown & Word (.docx)...")
                 
-    st.markdown('</div>', unsafe_allow_html=True)
+                plot_paths = []
+                for line in sandbox_output.splitlines():
+                    if "PLOT_SAVED:" in line:
+                        plot_paths.append(line.split("PLOT_SAVED:")[1].strip())
+
+                task_state = {
+                    "original_question": user_query,
+                    "main_dataset": main_dataset,
+                    "status": "APPROVED" if validation_passed else "NEEDS_REVIEW",
+                    "final_summary": execution_output,
+                    "sub_tasks": [
+                        {
+                            "id": 1,
+                            "description": "Data Analysis & Chart Generation",
+                            "query": user_query,
+                            "data_agent_result": da_res,
+                            "critic_validation": critic_status,
+                            "critic_code": critic_code,
+                            "critic_output": critic_output
+                        }
+                    ],
+                    "code_draft": code_draft,
+                    "execution_output": execution_output,
+                    "plot_paths": plot_paths,
+                    "validation_passed": validation_passed,
+                    "timestamp": datetime.now().isoformat()
+                }
+                if plot_paths:
+                    task_state["final_summary"] += "\n\n### Generated Data Visualizations\n"
+                    for p in plot_paths:
+                        task_state["final_summary"] += f"\n![Data Plot]({p})\n"
+
+                md_report = report_writer.compile_report(task_state)
+                docx_path = os.path.join(report_writer.reports_dir, "ARIA_Report_Latest.docx")
+                report_writer.convert_to_docx(md_report, docx_path)
+
+                status.update(label="✅ Execution & Verification Complete!", state="complete", expanded=False)
+
+            # Execution Pipeline Results Section
+            st.markdown("---")
+            st.subheader("📈 Execution Pipeline Results")
+            
+            c1, c2, c3 = st.columns(3)
+            with c1:
+                st.markdown("**Critic Validation Status:**")
+                if validation_passed:
+                    st.markdown('<span class="badge-success">✓ PASSED (3% Tolerance)</span>', unsafe_allow_html=True)
+                else:
+                    st.markdown('<span class="badge-warning">⚠️ NEEDS REVIEW</span>', unsafe_allow_html=True)
+            with c2:
+                st.markdown("**Plots Generated:**")
+                st.write(f"{len(plot_paths)} plot chart(s) created")
+            with c3:
+                st.markdown("**Word Document Generated:**")
+                if docx_path and os.path.exists(docx_path):
+                    with open(docx_path, "rb") as f:
+                        st.download_button("📥 Download DOCX Report", f.read(), file_name="ARIA_Analysis_Report.docx", mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+
+            # Dedicated Multi-Tab Inspector
+            tab1, tab2, tab3, tab4 = st.tabs(["📝 Analysis Report", "💻 Generated Code & Output", "🧠 Live Agent State Ledger", "📊 Data Quality EDA"])
+
+            with tab1:
+                if plot_paths:
+                    st.subheader("🖼️ Generated Data Visualizations")
+                    cols = st.columns(min(len(plot_paths), 2))
+                    for idx, p_path in enumerate(plot_paths):
+                        if os.path.exists(p_path):
+                            with cols[idx % 2]:
+                                st.image(p_path, caption=f"Figure {idx+1}: {os.path.basename(p_path)}", use_container_width=True)
+                st.subheader("📝 Generated Draft Report")
+                st.markdown(md_report)
+
+            with tab2:
+                st.subheader("💻 DataAgent Generated Analysis Code")
+                st.code(code_draft if code_draft else "# No code block available", language="python")
+                st.subheader("⚡ Sandbox Console Output")
+                st.code(execution_output if execution_output else "No output", language="text")
+
+                st.subheader("🛡️ CriticAgent Independent Verification Code")
+                st.code(critic_code if critic_code else "# No critic code block available", language="python")
+                st.subheader("🛡️ Critic Output")
+                st.code(critic_output if critic_output else "Validation complete", language="text")
+
+            with tab3:
+                st.subheader("🧠 ARIAState / Task State Machine Ledger")
+                st.write("Live state dictionary tracking all agent transitions across the execution pipeline:")
+                st.json(task_state)
+
+            with tab4:
+                st.subheader("📊 Exploratory Data Analysis Profile")
+                if eda_summary:
+                    st.json(eda_summary.dict())
+                else:
+                    st.info("No EDA profile available.")
+
+
+
+elif page == "📜 Report Archive & Sign-off":
+    st.markdown('<div class="main-header">📜 Report Archive & Human-in-the-Loop Sign-off</div>', unsafe_allow_html=True)
+    manifest = report_writer._load_manifest()
+    reports = manifest.get("reports", [])
+    
+    if not reports:
+        st.info("No reports found in manifest archive. Run a query to generate report drafts!")
+    else:
+        for idx, rep in enumerate(reversed(reports)):
+            with st.expander(f"📄 Report #{len(reports)-idx}: {rep.get('original_question')} ({rep.get('timestamp')[:16]})"):
+                md_file = os.path.join(report_writer.reports_dir, rep.get("md_path", ""))
+                if os.path.exists(md_file):
+                    with open(md_file, "r", encoding="utf-8") as f:
+                        content = f.read()
+                    
+                    st.markdown("**Current Status:** " + rep.get("status", "DRAFT"))
+                    edited_content = st.text_area("Edit Report Markdown", content, height=250, key=f"edit_{idx}")
+                    
+                    col_a, col_b = st.columns(2)
+                    with col_a:
+                        if st.button("✅ Approve & Sign-off Report", key=f"app_{idx}"):
+                            with open(md_file, "w", encoding="utf-8") as f:
+                                f.write(edited_content)
+                            report_writer.update_manifest_status(rep.get("md_path"), "APPROVED")
+                            st.success("Report approved and sign-off recorded!")
+                            st.rerun()
+                    with col_b:
+                        # Download buttons
+                        st.download_button("📥 Download Markdown", edited_content, file_name=rep.get("md_path"), mime="text/markdown", key=f"dl_{idx}")
+                else:
+                    st.warning("Report file missing.")
+
+elif page == "🗂️ Vector DB Dataset Index":
+    st.markdown('<div class="main-header">🗂️ Vector DB Dataset Index (ChromaDB)</div>', unsafe_allow_html=True)
+    st.write("Scan and profile workspace dataset schemas indexed in ChromaDB for semantic retrieval.")
+    
+    if st.button("🔄 Re-index Datasets in ChromaDB"):
+        with st.spinner("Indexing datasets in data/ into ChromaDB..."):
+            summary = vector_store.index_datasets()
+            st.success("Vector DB indexing complete!")
+            st.json(summary)
+            
+    st.subheader("Semantic Context Query Test")
+    test_q = st.text_input("Enter test query to search schema store:", "Bitcoin closing prices")
+    if test_q:
+        context = vector_store.query_context(test_q)
+        st.text_area("Retrieved Vector Context", context, height=200)

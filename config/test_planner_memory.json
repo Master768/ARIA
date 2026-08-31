@@ -1,0 +1,142 @@
+[
+  {
+    "query": "analyze player goals correlation",
+    "strategy": "Pearson correlation",
+    "dataset": "data/fifa.csv",
+    "confidence": 0.95,
+    "timestamp": 1786127119.121919
+  },
+  {
+    "query": "analyze player goals correlation",
+    "strategy": "Pearson correlation",
+    "dataset": "data/fifa.csv",
+    "confidence": 0.95,
+    "timestamp": 1786127385.4861197
+  },
+  {
+    "query": "analyze player goals correlation",
+    "strategy": "Pearson correlation",
+    "dataset": "data/fifa.csv",
+    "confidence": 0.95,
+    "timestamp": 1786175906.8961384
+  },
+  {
+    "query": "analyze player goals correlation",
+    "strategy": "Pearson correlation",
+    "dataset": "data/fifa.csv",
+    "confidence": 0.95,
+    "timestamp": 1786177318.4089804
+  },
+  {
+    "query": "analyze player goals correlation",
+    "strategy": "Pearson correlation",
+    "dataset": "data/fifa.csv",
+    "confidence": 0.95,
+    "timestamp": 1786177767.6675653
+  },
+  {
+    "query": "analyze player goals correlation",
+    "strategy": "Pearson correlation",
+    "dataset": "data/fifa.csv",
+    "confidence": 0.95,
+    "timestamp": 1786177771.3025656
+  },
+  {
+    "query": "analyze player goals correlation",
+    "strategy": "Pearson correlation",
+    "dataset": "data/fifa.csv",
+    "confidence": 0.95,
+    "timestamp": 1786178292.7656093
+  },
+  {
+    "query": "analyze player goals correlation",
+    "strategy": "Pearson correlation",
+    "dataset": "data/fifa.csv",
+    "confidence": 0.95,
+    "timestamp": 1786178784.550676
+  },
+  {
+    "query": "analyze player goals correlation",
+    "strategy": "Pearson correlation",
+    "dataset": "data/fifa.csv",
+    "confidence": 0.95,
+    "timestamp": 1786179150.5832763
+  },
+  {
+    "query": "analyze player goals correlation",
+    "strategy": "Pearson correlation",
+    "dataset": "data/fifa.csv",
+    "confidence": 0.95,
+    "timestamp": 1786179181.1504858
+  },
+  {
+    "query": "analyze player goals correlation",
+    "strategy": "Pearson correlation",
+    "dataset": "data/fifa.csv",
+    "confidence": 0.95,
+    "timestamp": 1786179215.2442312
+  },
+  {
+    "query": "analyze player goals correlation",
+    "strategy": "Pearson correlation",
+    "dataset": "data/fifa.csv",
+    "confidence": 0.95,
+    "timestamp": 1786180640.3458624
+  },
+  {
+    "query": "analyze player goals correlation",
+    "strategy": "Pearson correlation",
+    "dataset": "data/fifa.csv",
+    "confidence": 0.95,
+    "timestamp": 1786180680.065771
+  },
+  {
+    "query": "analyze player goals correlation",
+    "strategy": "Pearson correlation",
+    "dataset": "data/fifa.csv",
+    "confidence": 0.95,
+    "timestamp": 1786180891.4395564
+  },
+  {
+    "query": "analyze player goals correlation",
+    "strategy": "Pearson correlation",
+    "dataset": "data/fifa.csv",
+    "confidence": 0.95,
+    "timestamp": 1786180914.6240733
+  },
+  {
+    "query": "analyze player goals correlation",
+    "strategy": "Pearson correlation",
+    "dataset": "data/fifa.csv",
+    "confidence": 0.95,
+    "timestamp": 1786180940.7184901
+  },
+  {
+    "query": "analyze player goals correlation",
+    "strategy": "Pearson correlation",
+    "dataset": "data/fifa.csv",
+    "confidence": 0.95,
+    "timestamp": 1786181170.6993535
+  },
+  {
+    "query": "analyze player goals correlation",
+    "strategy": "Pearson correlation",
+    "dataset": "data/fifa.csv",
+    "confidence": 0.95,
+    "timestamp": 1786181915.8433778
+  },
+  {
+    "query": "analyze player goals correlation",
+    "strategy": "Pearson correlation",
+    "dataset": "data/fifa.csv",
+    "confidence": 0.95,
+    "timestamp": 1786181986.3576295
+  },
+  {
+    "query": "analyze player goals correlation",
+    "strategy": "Pearson correlation",
+    "dataset": "data/fifa.csv",
+    "confidence": 0.95,
+    "timestamp": 1786182053.5111713
+  }
+]

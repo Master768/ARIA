@@ -1,49 +1,69 @@
 # ARIA: Autonomous Research Intelligence for Analytics 📊
 
-**ARIA (Autonomous Research Intelligence for Analytics)** is an enterprise-grade, multi-agent AI framework built to automate data analysis pipelines. Using a double-entry validation pattern (Data Agent + Critic Agent), ARIA planning and execution flows ensure 100% mathematical correctness, eliminating hallucinations in data reporting. 
+**ARIA (Autonomous Research Intelligence for Analytics)** is an enterprise-grade, multi-agent AI framework built to automate complex data analysis pipelines. Built on top of **LangGraph StateGraph**, ARIA utilizes a multi-domain modular architecture with double-entry validation (**Data Science Suite** + **Audit Suite**), AST code-prose formula parsing, automated Matplotlib/Seaborn visualization generation, and self-healing engineering debuggers to deliver 100% verifiably correct analytical reports.
 
-Review, edit, and sign off on generated markdown reports directly in the companion web application: **Orchestra Report Studio**.
+Review, edit, and sign off on generated Markdown and Word (`.docx`) reports directly in the companion web application: **Orchestra Report Studio**.
 
 ---
 
 ## 🚀 Key Features
 
-*   **Multi-Agent Coordination**: Guided by a master `OrchestratorAgent` that plans queries into sequential, verify-able analytical sub-tasks.
-*   **Independent Double-Check Validation**: Each analytical step is computed by the `DataAgent` and independently validated by the `CriticAgent` via separate sandbox scripts. Any statistical or numeric drift triggers immediate self-correction.
-*   **Robust Local & API Inference**:
-    *   **Groq API Key Rotation**: Automatically rotates through a pool of Groq API keys to prevent rate limits (`429` errors).
-    *   **Ollama Model Fallback & Pool**: Supports offline execution via a local Ollama model pool (rotating model configurations on failures or empty outputs).
-*   **Automatic Error Correction**: Integrates a `DebugAgent` to auto-repair sandbox execution tracebacks (syntax errors, missing libraries, type exceptions).
-*   **Relevance-Based File Selection**: Dynamically scores and picks the most relevant dataset file using token overlaps, synonym mappings, and column schemas.
-*   **Prompt Sanitization**: Protects local tokenizers against crashes caused by unsupported symbols (e.g. Indian Rupee `₹`, unicode emojis, non-ASCII quotes) by mapping them to clean ASCII representations.
-*   **Secure Sandboxed Runtime**: Runs generated python code safely in a Docker container or sandbox file environment.
+*   **Modular Multi-Agent Architecture**: Organized into dedicated domain packages (`strategic`, `data_science`, `audit`, `engineering`, `deterministic`, `orchestration`, `skills`, `synthesis`).
+*   **LangGraph StateGraph Engine**: State-driven execution pipeline (`ARIAState`) managing deterministic node transitions and double-check verification loops across all agent suites.
+*   **Independent Double-Check Validation**: Each analytical step is computed by the Data Science Suite (`DataAgent`) and independently validated by the Audit Suite (`CriticAgent`, `VerificationPyramid`, `ConsistencyValidator`).
+*   **AST Code vs. Prose Formula Verification**: `CriticAgent` programmatically parses Python AST (`ast.BinOp`) to extract exact mathematical multipliers and flags any prose report discrepancies (e.g., `Code: pass_accuracy * 0.1` vs `Report: weight = 1`), rejecting mismatched drafts with `REJECTED_FORMULA_MISMATCH`.
+*   **Self-Healing Engineering Debugger**: Inline `DebugAgent` suite (`debug_classifier`, `debug_patcher`, `debug_root_cause`, `debug_validator`) automatically repairs sandbox tracebacks (syntax errors, missing packages, type errors) using REPL memory and AST checks.
+*   **Specialized Analytics Skill Engine**: Integrated `SkillRegistry` powering domain-specific analytical engines (`forecast`, `ml`, `optimization`, `sql`, `statistics`, `time_series`, `visualization`).
+*   **ChromaDB Vector Store RAG**: `ARIAVectorStore` maintains schema profiles, column data dictionaries, and sample records in ChromaDB for zero-shot semantic schema retrieval.
+*   **Automated Data Visualizations**: Computes statistics, generates styled Matplotlib & Seaborn visual charts (distributions, trendlines, comparative bars), exports high-resolution PNGs to `reports/assets/`, and embeds them inline into final reports.
+*   **Multi-Tier LLM Resiliency Cascade**:
+    *   **Groq API Key Rotation**: Automatically rotates through a pool of Groq API keys (`groq_api_keys.txt`) on encountering HTTP `429` rate limits.
+    *   **Ollama Model Fallback**: Seamlessly switches execution to local Ollama (`gpt-oss:20b-cloud`) if cloud APIs are unavailable.
+*   **Full Streamlit UI Transparency**: Live step-by-step model execution streaming (`st.status`), code inspector, sandbox outputs, and an interactive **Live Agent State Ledger (`ARIAState`)** JSON inspector.
 
 ---
 
 ## 🏛️ Multi-Agent Architecture
 
 ```mermaid
-graph TD
-    User([User Query]) --> ORCH[Orchestrator Agent]
-    ORCH -->|1. Data Profiling| EDA[Data Preprocessing Agent]
-    ORCH -->|2. Task Deconstruction| PLAN[Planning Agent]
-    PLAN -->|3. Run Sub-tasks| DA[Data Agent]
-    DA -->|4. Execute Python Code| SB[Docker Sandbox]
-    SB -->|Traceback / Failure| DBG[Debug Agent]
-    DBG -->|Fix Code| SB
-    SB -->|Execution Output| DA
-    DA -->|5. Claimed Result| CA[Critic Agent]
-    CA -->|6. Independent Query Code| SB
-    SB -->|Validator Output| CA
-    CA -->|7. Tolerance Check 3%| ORCH
-    ORCH -->|8. Compile Results| RW[Report Writer]
-    RW -->|9. Markdown / DOCX| UI[Orchestra Report Studio Web UI]
+flowchart TD
+    User([User Analytical Query]) --> VEC[ChromaDB Vector Store RAG]
+    VEC --> STRAT[Strategic Domain: PlanningAgent & PrePlanner]
+    STRAT --> DS[Data Science Domain: DataAgent & PreprocessingAgent]
+    DS --> SKILL[Skills Engine: ML, Stats, TimeSeries, SQL, Viz]
+    SKILL --> SB[Python Sandbox Execution & Chart Generator]
+    SB -->|Traceback / Exception| ENG[Engineering Domain: DebugAgent & Patcher]
+    ENG -->|Patched Code| SB
+    SB -->|Execution Output & Visual Plots| AUD[Audit Domain: CriticAgent & VerificationPyramid]
+    AUD -->|AST Formula & Weight Check| AST{AST Match & Gate Passed?}
+    AST -- Mismatch / Drift --> REJ[Reject Draft: REJECTED_FORMULA_MISMATCH]
+    REJ --> DS
+    AST -- Verified --> SYN[Synthesis Domain: ReportWriter]
+    SYN --> UI[Orchestra Report Studio Web UI / LangServe REST API]
 ```
 
-*   **Orchestrator Agent**: Manages the life cycle of the analysis, runs pre-profiling data checks, plans sub-tasks, coordinates agent data sharing, and aggregates final drafts.
-*   **Data Agent**: Understands dataset schemas and generates the python/pandas scripts required to compute target answers.
-*   **Critic Agent**: The gatekeeper of correctness. Receives the same sub-task prompt but is blind to the Data Agent's code. It generates its own verification script and validates the Data Agent's output against its findings (using a 3% tolerance gate).
-*   **Debug Agent**: Acts as an inline debugger. If code run in the sandbox fails, it parses stderr and outputs corrected code.
+### Modular Domain Suites:
+
+*   **Strategic Domain (`agents/strategic/`)**:
+    *   `PlanningAgent` / `PlanningEngine`: Formulates execution strategy, breaks queries into DAG sub-tasks, and orchestrates agent workflows.
+    *   `PrePlanner`: Pre-computes query execution maps and data dependencies.
+*   **Data Science Domain (`agents/data_science/`)**:
+    *   `DataAgent`: Generates Pandas, NumPy, and Matplotlib/Seaborn python scripts inside a secure execution sandbox.
+    *   `PreprocessingAgent`: Conducts exploratory data analysis (EDA), profiling missing data, duplicates, types, and outliers with quality scoring.
+*   **Audit & Verification Domain (`agents/audit/`)**:
+    *   `CriticAgent`: Independent gatekeeper that validates numeric outputs and parses AST formula trees.
+    *   `VerificationPyramid`: Tiered validation checking units, logic, boundary conditions, and consistency.
+    *   `ConsistencyValidator` & `ReflectionEngine`: Multi-stage verification ensuring report claims match sandbox outputs.
+*   **Engineering & Debug Domain (`agents/engineering/`)**:
+    *   `DebugAgent` / `DebugClassifier` / `DebugPatcher` / `DebugRootCause` / `DebugValidator`: Auto-repair engine diagnosing REPL stack traces, generating code patches, and verifying fix stability.
+*   **Deterministic Domain (`agents/deterministic/`)**:
+    *   `DeterministicEngine`, `AnalysisRouter`, `DatasetIntelligenceEngine`, `DatasetProfileStore`: Caches dataset profiles, routes deterministic queries, and manages schema metadata.
+*   **Orchestration Domain (`agents/orchestration/`)**:
+    *   `AsyncDAGScheduler`, `ExecutionCache`, `PromptPruner`, `StageProfiler`, `TelemetryStreamer`: Handles parallel sub-task execution, caching intermediate computations, prompt token optimization, and real-time execution telemetry.
+*   **Skills Engine (`agents/skills/`)**:
+    *   `SkillRegistry` & `BaseSkill`: Standardized skill loader powering specialized analytical handlers (`forecast_skill`, `ml_skill`, `optimization_skill`, `sql_skill`, `statistics_skill`, `time_series_skill`, `visualization_skill`).
+*   **Synthesis Domain (`agents/synthesis/`)**:
+    *   `ReportWriter`: Compiles structured Markdown reports with embedded charts and exports styled Word (`.docx`) documents.
 
 ---
 
@@ -52,36 +72,65 @@ graph TD
 ```
 Orchestra/
 │
-├── agents/                     # Core Agent Implementations
-│   ├── orchestrator.py         # Orchestrator & Task Planner
-│   ├── data_agent.py           # Pandas Code Generator
-│   ├── critic_agent.py         # Verification & Numeric Validator
-│   ├── debug_agent.py          # Auto-Repair & Debugging Code
-│   ├── preprocessing_agent.py  # Data Profiling & Quality gate (EDA)
-│   ├── report_writer.py        # DOCX & Markdown Publisher
-│   └── llm_client.py           # Shared Client w/ Key Rotation & Ollama Fallback
+├── agents/                         # Core Multi-Agent Architecture
+│   ├── audit/                      # Verification & Audit Suite
+│   │   ├── critic_agent.py         # AST Formula & Numeric Validator
+│   │   ├── consistency_validator.py# Multi-Stage Report Consistency Verification
+│   │   ├── reflection_engine.py    # Self-Reflection & Critique Engine
+│   │   └── verification_pyramid.py # Tiered Validation Pyramid
+│   │
+│   ├── data_science/               # Analytics & EDA Engine
+│   │   ├── data_agent.py           # Pandas Code & Chart Generator
+│   │   └── preprocessing_agent.py  # EDA Data Profiling & Quality Gate
+│   │
+│   ├── deterministic/              # Deterministic Execution & Metadata
+│   │   ├── analysis_router.py      # Query Router
+│   │   ├── dataset_intelligence_engine.py
+│   │   ├── dataset_profile_store.py# Profile Caching
+│   │   ├── deterministic_engine.py # Deterministic Query Engine
+│   │   └── pre_planner.py          # Execution Pre-Planner
+│   │
+│   ├── engineering/                # Auto-Repair & Debugging Suite
+│   │   ├── debug_agent.py          # Script Debugger & Sandbox Repair
+│   │   ├── debug_classifier.py     # Error Traceback Classifier
+│   │   ├── debug_patcher.py        # Code Patch Generator
+│   │   ├── debug_root_cause.py     # Root Cause Diagnoser
+│   │   └── debug_validator.py      # Fixed Code Validator
+│   │
+│   ├── orchestration/              # Performance & Scheduler Suite
+│   │   ├── async_dag_scheduler.py  # Async Task Scheduler
+│   │   ├── execution_cache.py      # Intermediate Execution Caching
+│   │   ├── prompt_pruner.py        # Context & Token Optimizer
+│   │   ├── stage_profiler.py       # Node Profiling Telemetry
+│   │   └── telemetry_streamer.py   # Real-time Execution Telemetry
+│   │
+│   ├── skills/                     # Domain Skill Engine
+│   │   ├── base_skill.py           # Skill Interface
+│   │   ├── skill_registry.py       # Registry & Dispatcher
+│   │   └── impl/                   # Specialized Skills (Forecast, ML, Stats, SQL, Viz, etc.)
+│   │
+│   ├── strategic/                  # Strategic & Task Planning Suite
+│   │   ├── planning_agent.py       # Planning Agent & PM Engine
+│   │   └── planning_engine.py      # Task Decomposition Engine
+│   │
+│   ├── synthesis/                  # Report Generation Suite
+│   │   └── report_writer.py        # Markdown & DOCX Publisher
+│   │
+│   ├── graph.py                    # LangGraph StateGraph Node Workflow
+│   ├── llm_client.py               # Groq Key Rotation & Ollama Fallback Client
+│   ├── orchestrator.py             # CLI Compatibility Wrapper for PlanningAgent
+│   ├── state.py                    # ARIAState TypedDict Schema
+│   └── vector_store.py             # ChromaDB Vector RAG & Schema Watcher
 │
-├── config/                     # Configuration and Task State
-│   └── task_state.json         # State Ledger tracking agent execution
-│
-├── data/                       # Local Datasets (e.g., CSV files)
-│   ├── Binance_BTCUSDT_1h.csv  # Historical Bitcoin Price Data
-│   └── amazon.csv              # Amazon India Customer Reviews
-│
-├── reports/                    # Generated Draft and Final Reports
-│   └── manifest.json           # Catalog of generated reports
-│
-├── sandbox/                    # Safe runtime environment
-│   └── Dockerfile              # Docker sandbox builder
-│
-├── tests/                      # Pytest unit tests
-│   ├── test_orchestration.py
-│   ├── test_validation.py
-│   └── ...
-│
-├── streamlit_app.py            # Orchestra Report Studio dashboard
-├── groq_api_keys.txt           # Groq API key rotation pool
-└── requirements.txt            # Python dependencies
+├── config/                         # System & Memory Configurations
+├── data/                           # Local CSV & Parquet Datasets
+├── reports/                        # Output Markdown & DOCX Reports (with assets/)
+├── sandbox/                        # Sandbox Code Execution Environment
+├── server.py                       # FastAPI & LangServe REST Microservice
+├── streamlit_app.py                # Orchestra Report Studio Web UI
+├── PRODUCT.md                      # Product Specification Document
+├── groq_api_keys.txt               # Groq API Key Pool
+└── requirements.txt                # Python Dependencies
 ```
 
 ---
@@ -94,8 +143,7 @@ git clone https://github.com/Master768/ARIA.git
 cd ARIA
 ```
 
-### 2. Set Up Environment
-Create a virtual environment and install dependencies:
+### 2. Set Up Virtual Environment
 ```bash
 python -m venv venv
 venv\Scripts\activate   # On Windows
@@ -104,45 +152,44 @@ pip install -r requirements.txt
 ```
 
 ### 3. API & Model Configuration
-Create a `.env` file in the root directory:
+Create or edit `.env` in the root directory:
 ```properties
-# Models config
 GROQ_MODEL=llama-3.3-70b-versatile
 OLLAMA_MODEL=gpt-oss:20b-cloud
-OLLAMA_MODELS=gpt-oss:20b-cloud
-
-# Force local Ollama execution (offline mode)
-USE_OLLAMA=true
+OLLAMA_HOST=http://localhost:11434
+USE_OLLAMA=false
 USE_DOCKER=false
 ```
 
-If using the **Groq API**:
-- Add your API keys to `groq_api_keys.txt` (one key per line or using `KEY = value` format).
-- Set `USE_OLLAMA=false` in `.env`.
+If using **Groq API**:
+- Add your API keys to `groq_api_keys.txt` (one key per line).
+- Automatic key rotation will switch keys on encountering HTTP `429` rate limits.
 
 ---
 
 ## 🕹️ Running the Project
 
 ### Command Line Interface
-To run the orchestrator directly from the command line:
+To run the analytical pipeline directly from CLI:
 ```bash
-python agents/orchestrator.py "What was the highest Bitcoin closing price in 2025?"
+python agents/orchestrator.py "Analyze the dataset and summarize key trends."
 ```
 
 ### Web Studio Dashboard
-To launch the **Orchestra Report Studio** dashboard (where you can view Critic validation runs, edit drafts, and export reports to Markdown or Word):
+To launch the interactive **Orchestra Report Studio** dashboard:
 ```bash
 streamlit run streamlit_app.py
 ```
 
-### Running Tests
-Ensure everything is correctly configured by executing the pytest test suite:
+### LangServe REST Microservice
+To launch the FastAPI / LangServe production REST API server:
 ```bash
-pytest tests/
+python server.py
 ```
 
 ---
 
 ## 🛡️ License
 Distributed under the MIT License. See `LICENSE` for more information.
+
+
