@@ -19,6 +19,7 @@ ENV/
 
 # Agent caches and logs
 logs/
+ppt/
 reports/*.md
 reports/*.json
 reports/*.docx
