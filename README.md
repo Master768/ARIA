@@ -124,6 +124,7 @@ Orchestra/
 │
 ├── config/                         # System & Memory Configurations
 ├── data/                           # Local CSV & Parquet Datasets
+├── ppt/                            # Presentation Slide Decks & Visual Assets
 ├── reports/                        # Output Markdown & DOCX Reports (with assets/)
 ├── sandbox/                        # Sandbox Code Execution Environment
 ├── server.py                       # FastAPI & LangServe REST Microservice
