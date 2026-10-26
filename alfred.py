@@ -35,22 +35,13 @@ def print_alfred(text):
     print(f"\n{GOLD}[Alfred]:{RESET} {text}")
 
 def setup_ide_skills():
-    """Installs skills into .agents/skills/ so Antigravity and agent harnesses auto-detect them."""
-    src = os.path.abspath("orchestra/skills")
+    """Verifies that skills are in .agents/skills/ so Antigravity and agent harnesses auto-detect them."""
     dest = os.path.abspath(".agents/skills")
-    os.makedirs(dest, exist_ok=True)
-    if os.path.exists(src):
-        for item in os.listdir(src):
-            s = os.path.join(src, item)
-            d = os.path.join(dest, item)
-            if os.path.isdir(s):
-                if os.path.exists(d):
-                    shutil.rmtree(d)
-                shutil.copytree(s, d)
-        print_alfred(f"{GREEN}All agent skills successfully linked to {BOLD}.agents/skills/{RESET}!")
-        print_alfred("Your AI environment (Antigravity, Claude Code, Cursor) will now recognize me and all specialists natively.")
+    if os.path.exists(dest) and len(os.listdir(dest)) > 0:
+        print_alfred(f"{GREEN}All agent skills are actively installed in {BOLD}.agents/skills/{RESET}!")
+        print_alfred("Your AI environment (Antigravity, Claude Code, Cursor) will recognize me and all specialists natively.")
     else:
-        print_alfred(f"Could not locate {src}. Please ensure you are running from the repository root.")
+        print_alfred(f"Warning: {dest} not found. Please ensure you are at the repository root.")
 
 def init_clean_workspace():
     """Prepares clean data/ and reports/ directories for the user's custom project."""
