@@ -48,3 +48,10 @@ models/*.joblib
 # OS files
 .DS_Store
 Thumbs.db
+
+# Thesis, Dissertation and Academic Reviews
+thesis/
+*Dissertation*
+*thesis*
+reports/published/
+scratch*
