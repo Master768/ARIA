@@ -16,6 +16,27 @@ The **ARIA Council** gathers our specialist roster into a structured, adversaria
 
 ---
 
+## 🚦 Activation Policy: Routine vs. Complex Inquiries
+
+The Council is reserved for **high-stakes, multi-faceted, or ambiguous decisions** to ensure deep intellectual rigor without slowing down routine operations:
+
+### 🟢 Bypass the Council (Direct Specialist Delegation)
+Do **NOT** convene the Council for routine, deterministic, or simple tasks:
+- Simple data inspections (e.g., *"What columns are in this CSV?"*, *"Show the top 5 rows"*).
+- Standard coding assistance or package management.
+- Routine deterministic pre-processing (e.g., *"Apply standard scaler to numeric features"*).
+- Direct query extraction (e.g., *"Silas, pull the orders table via DuckDB"*).
+
+### 🔴 MANDATORY Council Roundtable (Regardless of Dataset)
+Convene the Council immediately whenever encountering **complex, strategic, or cross-cutting questions**:
+1. **Hypothesis Evaluation & Feature Strategy:** Proposing non-trivial feature transforms, group aggregations, or missingness strategies with potential leakage or bias.
+2. **Architecture & Modeling Dilemmas:** Trade-offs between interpretability (linear/GAM) vs. predictive power (gradient boosting/neural nets), or handling severe class imbalance.
+3. **Surprising or Conflicting Findings:** When models behave unexpectedly, features exhibit paradoxes (e.g., Simpson's paradox), or distributions drift.
+4. **Business Payoff & Error Tolerance:** Slicing error costs (Cost of False Positives vs. False Negatives) and regulatory or governance auditability.
+5. **Ambiguous Analytical Directives:** When the user asks open-ended questions like *"How should we model customer lifetime value?"* or *"Why are high-tenure users churning?"*.
+
+---
+
 ## 👥 The Council Seats & Competing Perspectives
 
 | Specialist | Persona Lens | What They Attack / Defend |
