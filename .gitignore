@@ -27,7 +27,8 @@ reports/manifest.json
 config/task_state.json
 sandbox/temp_query.py
 .agent/
-.agents/
+.agents/*
+!.agents/skills/
 .claude/
 .codex/
 .cursor/
