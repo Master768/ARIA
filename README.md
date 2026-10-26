@@ -15,28 +15,99 @@ ARIA eliminates external LLM API-key dependencies, heavyweight orchestration fra
 
 ```mermaid
 flowchart TD
-    UserQuery([User Analytical Inquiry]) --> Router[ds-agent-router: Intent Dispatcher]
-    
-    subgraph Data Ingestion & Cataloging
-        Router --> Arthur[Arthur: Source Locator & Catalog Architect]
-        Arthur --> Silas[Silas: SQL Architect & DuckDB Ingestion]
-        Silas --> RawData[(data/raw/: Parquet & CSV)]
+    %% Styling Classes
+    classDef concierge fill:#0F172A,stroke:#38BDF8,stroke-width:2px,color:#F8FAFC
+    classDef gate fill:#1E1B4B,stroke:#818CF8,stroke-width:2px,color:#EEF2FF
+    classDef council fill:#2E1065,stroke:#C084FC,stroke-width:2px,color:#FAF5FF
+    classDef ingestion fill:#064E3B,stroke:#34D399,stroke-width:2px,color:#ECFDF5
+    classDef science fill:#172554,stroke:#60A5FA,stroke-width:2px,color:#EFF6FF
+    classDef storage fill:#4A044E,stroke:#F472B6,stroke-width:2px,color:#FDF4FF
+    classDef deliverable fill:#4C0519,stroke:#FB7185,stroke-width:2px,color:#FFF1F2
+
+    subgraph ClientLayer ["1. Concierge & Interaction Layer"]
+        User(["User Analytical Request"]) --> Alfred["Alfred: Chief Concierge & Major-Domo"]
+        Alfred --> QueryGate{"Query Complexity Gate"}
     end
-    
-    subgraph Core ML & Data Science Suite
-        RawData --> Maya[Maya: Exploratory Data Science & EDA]
-        Maya --> Leo[Leo: Leak-Free Preprocessing & Cleansing]
-        Leo --> Priya[Priya: Feature Engineering & Selection]
-        Priya --> Julian[Julian: Model Tournament & Optuna Tuning]
-        Julian --> Elena[Elena: Model Evaluation & SHAP Governance]
+
+    subgraph CouncilLayer ["2. The ARIA Council (Adversarial Peer Review Roundtable)"]
+        QueryGate -- "Complex / High-Stakes Inquiries" --> CouncilSession["The Council Roundtable Debate"]
+        
+        CouncilSession --> C_Maya["Maya: Distribution Audit (Tukey)"]
+        CouncilSession --> C_Leo["Leo: Leakage & Pipeline Integrity (Deming)"]
+        CouncilSession --> C_Priya["Priya: Predictive Signal Extraction (Kaggle)"]
+        CouncilSession --> C_Julian["Julian: Overfitting & Tournament (Breiman)"]
+        CouncilSession --> C_Elena["Elena: Subgroup Bias & SHAP (Rudin)"]
+        CouncilSession --> C_Marcus["Marcus: Boardroom Clarity (Tufte)"]
+
+        C_Maya & C_Leo & C_Priya & C_Julian & C_Elena & C_Marcus --> Consensus["Alfred: Synthesized Hardened Consensus"]
     end
-    
-    subgraph Synthesis & Executive Reporting
-        Elena --> Gate{Human Confirmation Gate}
-        Gate -- Confirmed --> Marcus[Marcus: Executive Storyteller]
-        Marcus --> DocxSkill[Anthropic docx Skill]
-        DocxSkill --> PublishedDocx[reports/published/*.docx]
+
+    subgraph ExecutionLayer ["3. Specialist Data Science Execution Spine"]
+        QueryGate -- "Routine / Direct Tasks" --> DirectExec["Direct Specialist Dispatch"]
+        Consensus --> DirectExec
+        
+        DirectExec --> Arthur["Arthur: Data Source Discovery & Catalogs"]
+        Arthur --> Silas["Silas: High-Performance SQL & DuckDB"]
+        Silas --> RawStore[("data/raw/: Parquet & CSV")]
+
+        RawStore --> Maya["Maya: Exploratory Data Science & VIF Profiling"]
+        Maya --> Leo["Leo: Leak-Free Preprocessing & Imputation"]
+        Leo --> ProcessedStore[("data/processed/: train / test splits")]
+
+        ProcessedStore --> Priya["Priya: High-Order Feature Engineering & RFECV"]
+        Priya --> FeatureStore[("data/features/: X_train / y_train")]
+
+        FeatureStore --> Julian["Julian: Model Tournament & Optuna Bayesian Tuning"]
+        Julian --> ModelStore[("models/: champion_model.joblib")]
+
+        ModelStore --> Elena["Elena: Governance Audit & TreeSHAP Attributions"]
     end
+
+    subgraph DeliveryLayer ["4. Governance Gate & Executive Delivery"]
+        Elena --> HumanGate{"Human Confirmation Gate"}
+        HumanGate -- "User Approves" --> Marcus["Marcus: Executive Storyteller & Visualizer"]
+        Marcus --> DocxCompiler["Anthropic DOCX Specification Compiler"]
+        DocxCompiler --> FinalReport[("reports/published/[Project]_Report.docx")]
+    end
+
+    %% Class Assignments
+    class User,Alfred concierge
+    class QueryGate,HumanGate gate
+    class CouncilSession,Consensus,C_Maya,C_Leo,C_Priya,C_Julian,C_Elena,C_Marcus council
+    class Arthur,Silas ingestion
+    class Maya,Leo,Priya,Julian,Elena science
+    class RawStore,ProcessedStore,FeatureStore,ModelStore storage
+    class Marcus,DocxCompiler,FinalReport deliverable
+```
+
+### ⚔️ The Council Protocol: Multi-Agent Adversarial Peer Review
+
+When encountering complex hypotheses, non-trivial feature engineering, or modeling dilemmas, ARIA convenes the Council to cross-examine proposals from competing viewpoints before committing code:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as User / Stakeholder
+    participant Alfred as Alfred (Concierge & Chair)
+    participant Priya as Priya (Features / Kaggle)
+    participant Leo as Leo (Cleaning / Deming)
+    participant Maya as Maya (EDA / Tukey)
+    participant Elena as Elena (Audit / Rudin)
+    participant Julian as Julian (ML / Breiman)
+    participant Marcus as Marcus (Story / Tufte)
+
+    User->>Alfred: Submits Complex Analytical Goal
+    Alfred->>Alfred: Evaluates Gating: Complex / High-Stakes -> Convenes Council
+    Note over Alfred,Marcus: 🏛️ The ARIA Council Roundtable (Adversarial Cross-Examination)
+    Alfred->>Priya: Tables feature transformation proposal
+    Priya-->>Alfred: Proposes target-encoded family survival rates
+    Leo->>Priya: Attacks lookahead data leakage; demands Out-of-Fold (OOF) cross-validation
+    Maya->>Priya: Challenges age imputation; mandates Title + Parch conditional grouping
+    Elena->>Priya: Audits surname grouping; reveals false-positive family links across strangers
+    Julian->>Priya: Flags tree overfitting on small families; enforces regularized discrete bins
+    Marcus->>Priya: Demands intuitive business terminology for C-suite report
+    Alfred->>Alfred: Synthesizes debate into hardened, leak-free consensus
+    Alfred-->>User: Delivers Council findings & battle-tested action plan
 ```
 
 ---
