@@ -98,7 +98,7 @@ sequenceDiagram
 
     User->>Alfred: Submits Complex Analytical Goal
     Alfred->>Alfred: Evaluates Gating: Complex / High-Stakes — Convenes Council
-    Note over Alfred,Marcus: The ARIA Council Roundtable (Adversarial Cross-Examination)
+    Note over Alfred,Marcus: 🏛️ The ARIA Council Roundtable (Adversarial Cross-Examination)
     Alfred->>Priya: Tables feature transformation proposal
     Priya-->>Alfred: Proposes target-encoded family survival rates
     Leo->>Priya: Attacks lookahead data leakage, demands Out-of-Fold (OOF) cross-validation

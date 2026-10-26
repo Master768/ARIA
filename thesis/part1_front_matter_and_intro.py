@@ -122,14 +122,36 @@ def build_part1(doc):
     add_body_p(doc, 
         "This research represents an original investigation conducted under my supervision. The results embodied in this dissertation have not been submitted to any other university or institute for the award of any other degree or diploma.")
 
-    doc.add_paragraph().paragraph_format.space_after = Pt(50)
+    p_pd = doc.add_paragraph()
+    p_pd.paragraph_format.line_spacing = 1.2
+    p_pd.paragraph_format.space_before = Pt(12)
+    p_pd.paragraph_format.space_after = Pt(12)
+    r = p_pd.add_run("Place  : Chennai\nDate   : 26th October, 2026")
+    r.font.name = 'Times New Roman'
+    r.font.size = Pt(11.5)
 
     p_guide_sig = doc.add_paragraph()
     p_guide_sig.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    p_guide_sig.paragraph_format.line_spacing = 1.3
-    r = p_guide_sig.add_run("Dr. NAZEER ANSARI\nResearch Guide & Associate Professor\nDepartment of Mathematics\nSchool of Advanced Sciences\nVIT Chennai — 600 127")
+    p_guide_sig.paragraph_format.line_spacing = 1.2
+    p_guide_sig.paragraph_format.space_after = Pt(14)
+    r = p_guide_sig.add_run("Signature of the Guide\n\n\nDr. NAZEER ANSARI\nDepartment of Mathematics\nSchool of Advanced Sciences\nVIT Chennai — 600 127")
     r.font.name = 'Times New Roman'
-    r.font.size = Pt(12)
+    r.font.size = Pt(11.5)
+
+    p_exam = doc.add_paragraph()
+    p_exam.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    p_exam.paragraph_format.line_spacing = 1.2
+    p_exam.paragraph_format.space_after = Pt(14)
+    r = p_exam.add_run("Name & Signature of the Examiner(s)\n1.\n\n2.")
+    r.font.name = 'Times New Roman'
+    r.font.size = Pt(11.5)
+
+    p_hod = doc.add_paragraph()
+    p_hod.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+    p_hod.paragraph_format.line_spacing = 1.2
+    r = p_hod.add_run("Dr. MANIVANNAN A\nHead, Department of Mathematics\nSAS, VIT-Chennai")
+    r.font.name = 'Times New Roman'
+    r.font.size = Pt(11.5)
 
     doc.add_page_break()
 
@@ -148,6 +170,15 @@ def build_part1(doc):
 
     add_body_p(doc, 
         "Finally, we express our heartfelt love and indebtedness to our parents and family members for their unconditional support, prayers, and patience throughout our academic journey.")
+
+    doc.add_paragraph().paragraph_format.space_after = Pt(30)
+
+    p_stud_sig = doc.add_paragraph()
+    p_stud_sig.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+    p_stud_sig.paragraph_format.line_spacing = 1.3
+    r = p_stud_sig.add_run("Signature of the Student(s)\n\n\n___________________________\nRAVINDRAN (25MDT1133)\n\n\n___________________________\nNITHISHSARAN (25MDT1089)")
+    r.font.name = 'Times New Roman'
+    r.font.size = Pt(11.5)
 
     doc.add_page_break()
 
@@ -195,29 +226,29 @@ def build_part1(doc):
         ["CHAPTER 1: INTRODUCTION", "1"],
         ["   1.1 Motivation: Cognitive Fragmentation in Data Science", "1"],
         ["   1.2 Background & Related Work: The Evolution of Autonomous Agents", "2"],
-        ["   1.3 Problem Statement & Research Hypotheses", "4"],
-        ["   1.4 Research Objectives", "5"],
-        ["   1.5 Dissertation Organization", "6"],
-        ["CHAPTER 2: SYSTEM ARCHITECTURE & MULTI-AGENT DESIGN", "7"],
-        ["   2.1 Architectural Spine & Core Philosophical Invariants", "7"],
-        ["   2.2 The Executive Concierge: Alfred the Major-Domo Orchestrator", "9"],
-        ["   2.3 The Roster of Specialized Domain Agents", "11"],
-        ["   2.4 The ARIA Council Protocol: Adversarial Peer Review", "13"],
-        ["   2.5 Invariant Enforcement: Zero Leakage and Clean Typography", "15"],
-        ["CHAPTER 3: IMPLEMENTATION, METHODOLOGY & EXPERIMENTAL EVALUATION", "16"],
-        ["   3.1 Software Architecture & Reproducible Execution Pipeline", "16"],
-        ["   3.2 Experimental Setup & Benchmark Datasets", "18"],
-        ["   3.3 Multi-Agent Ablation Analysis: Single-Agent vs. Council Debate", "20"],
-        ["   3.4 Signal Extraction & High-Order Feature Engineering Impact", "21"],
-        ["   3.5 Model Tournament & Optuna Bayesian Optimization Trajectories", "22"],
-        ["   3.6 Model Governance, SHAP Attribution & Cohort Fairness Auditing", "23"],
-        ["CHAPTER 4: CONCLUSION, FUTURE SCOPE & REFERENCES", "25"],
-        ["   4.1 Summary of Scientific Contributions", "25"],
-        ["   4.2 Industry Implications & Enterprise MLOps Integration", "26"],
-        ["   4.3 Limitations & Failure Mode Analysis", "27"],
-        ["   4.4 Future Directions & Research Roadmap", "28"],
-        ["   4.5 Academic References", "29"],
-        ["APPENDIX: SYSTEM PROMPT INVARIANTS & PIPELINE ARTIFACTS", "30"]
+        ["   1.3 Problem Statement & Research Hypotheses", "3"],
+        ["   1.4 Research Objectives", "4"],
+        ["   1.5 Dissertation Organization", "4"],
+        ["CHAPTER 2: SYSTEM ARCHITECTURE & MULTI-AGENT DESIGN", "5"],
+        ["   2.1 Architectural Spine & Core Philosophical Invariants", "5"],
+        ["   2.2 The Executive Concierge: Alfred the Major-Domo Orchestrator", "7"],
+        ["   2.3 The Roster of Specialized Domain Agents", "8"],
+        ["   2.4 The ARIA Council Protocol: Adversarial Peer Review", "10"],
+        ["   2.5 Invariant Enforcement: Zero Leakage and Clean Typography", "12"],
+        ["CHAPTER 3: IMPLEMENTATION, METHODOLOGY & EXPERIMENTAL EVALUATION", "13"],
+        ["   3.1 Software Architecture & Reproducible Execution Pipeline", "13"],
+        ["   3.2 Experimental Setup & Benchmark Datasets", "14"],
+        ["   3.3 Multi-Agent Ablation Analysis: Single-Agent vs. Council Debate", "15"],
+        ["   3.4 Signal Extraction & High-Order Feature Engineering Impact", "16"],
+        ["   3.5 Model Tournament & Optuna Bayesian Optimization Trajectories", "17"],
+        ["   3.6 Model Governance, SHAP Attribution & Cohort Fairness Auditing", "18"],
+        ["CHAPTER 4: CONCLUSION, FUTURE SCOPE & REFERENCES", "19"],
+        ["   4.1 Summary of Scientific Contributions", "19"],
+        ["   4.2 Industry Implications & Enterprise MLOps Integration", "19"],
+        ["   4.3 Limitations & Failure Mode Analysis", "20"],
+        ["   4.4 Future Directions & Research Roadmap", "20"],
+        ["   4.5 Academic References", "21"],
+        ["APPENDIX: SYSTEM PROMPTS, MATHEMATICAL SPECIFICATIONS & ARTIFACTS", "22"]
     ]
     add_styled_table(doc, ["Section Title", "Page Number"], toc_data, col_widths=[5.0, 1.27])
 
@@ -226,23 +257,25 @@ def build_part1(doc):
     # List of Figures & Tables
     add_title(doc, "LIST OF FIGURES", space_before=18, space_after=14)
     figs_data = [
-        ["Figure 2.1", "High-Level Architecture of ARIA End-to-End Orchestration Framework", "8"],
-        ["Figure 2.2", "Sequence Interaction Diagram of the ARIA Council Peer Review Roundtable", "14"],
-        ["Figure 3.1", "Directory Structure and Parquet-Driven Handoff Pipeline", "17"],
-        ["Figure 3.2", "Optuna Bayesian Optimization Hyperband Convergence Trajectory", "22"],
-        ["Figure 3.3", "Global SHAP Beeswarm Summary Plot for Holdout Test Inference", "24"],
-        ["Figure 3.4", "Receiver Operating Characteristic (ROC) and Precision-Recall Curves", "24"]
+        ["Figure 2.1", "High-Level Architecture of ARIA End-to-End Orchestration Framework", "6"],
+        ["Figure 2.2", "Sequence Interaction Diagram of the ARIA Council Peer Review Roundtable", "11"],
+        ["Figure 3.1", "Directory Structure and Parquet-Driven Handoff Pipeline", "14"],
+        ["Figure 3.2", "Optuna Bayesian Optimization Hyperband Convergence Trajectory", "17"],
+        ["Figure 3.3", "Global SHAP Beeswarm Summary Plot for Holdout Test Inference", "18"],
+        ["Figure 3.4", "Receiver Operating Characteristic (ROC) and Precision-Recall Curves", "18"]
     ]
     add_styled_table(doc, ["Figure No.", "Figure Caption", "Page"], figs_data, col_widths=[1.2, 4.0, 1.07])
 
     add_title(doc, "LIST OF TABLES", space_before=18, space_after=14)
     tables_data = [
-        ["Table 1.1", "Comparison of Existing Autonomous Agent Paradigms in Data Science", "3"],
-        ["Table 2.1", "ARIA Specialist Roster, Mentor Philosophies, and Primary Responsibilities", "12"],
-        ["Table 3.1", "Benchmark Dataset Characteristics and Dimensional Geometry", "18"],
-        ["Table 3.2", "Ablation Study: Single LLM vs Standard AutoML vs ARIA Council", "20"],
-        ["Table 3.3", "Feature Importance, Multicollinearity (VIF), and Mutual Information Lift", "21"],
-        ["Table 3.4", "Comprehensive Multi-Model Algorithm Tournament Performance", "23"]
+        ["Table 1.1", "Comparison of Existing Autonomous Agent Paradigms in Data Science", "2"],
+        ["Table 2.1", "ARIA Specialist Roster, Mentor Philosophies, and Primary Responsibilities", "9"],
+        ["Table 2.2", "Dynamic Gating Protocol & Routing Decision Matrix", "11"],
+        ["Table 3.1", "Benchmark Dataset Characteristics and Dimensional Geometry", "14"],
+        ["Table 3.2", "Ablation Study: Single LLM vs Standard AutoML vs ARIA Council", "15"],
+        ["Table 3.3", "Feature Importance, Multicollinearity (VIF), and Mutual Information Lift", "16"],
+        ["Table 3.4", "Comprehensive Multi-Model Algorithm Tournament Performance", "17"],
+        ["Table 3.5", "Optuna Bayesian Optimization Search Hypercube Bounds", "18"]
     ]
     add_styled_table(doc, ["Table No.", "Table Description", "Page"], tables_data, col_widths=[1.2, 4.0, 1.07])
 

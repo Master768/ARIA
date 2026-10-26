@@ -38,6 +38,7 @@ def main():
     # Also save to user's Test 1 directory
     out_dir_test1 = r"C:\Users\Ravin\OneDrive\Desktop\Test 1"
     out_path_test1 = os.path.join(out_dir_test1, "ARIA_Dissertation_MSc_Data_Science.docx")
+    out_path_test1_edit = os.path.join(out_dir_test1, "ARIA_Dissertation_MSc_Data_Science edit.docx")
     
     doc.save(out_path_local)
     print(f"\n[SUCCESS] Document saved locally to: {out_path_local}")
@@ -47,6 +48,12 @@ def main():
         print(f"[SUCCESS] Document saved to Test 1 workspace: {out_path_test1}")
     except Exception as e:
         print(f"[WARNING] Could not save directly to Test 1: {e}")
+
+    try:
+        doc.save(out_path_test1_edit)
+        print(f"[SUCCESS] Document saved to Test 1 edit target: {out_path_test1_edit}")
+    except Exception as e:
+        print(f"[WARNING] Could not save directly to Test 1 edit target: {e}")
         
     print(f"\nTotal Paragraphs: {len(doc.paragraphs)}")
     print(f"Total Tables: {len(doc.tables)}")

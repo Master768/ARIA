@@ -138,6 +138,27 @@ def build_part2(doc):
     add_callout_box(doc, "Alfred", "Consensus Verdict", 
         "The Council has spoken. We approve the family signal with: (1) Title + Parch conditioned age imputation, (2) Surname + Pclass + Ticket compound grouping, (3) OOF leak-free cross-validation, and (4) discrete regularized survival states.")
 
+    add_heading_2(doc, "2.4.2 Mathematical Formalization of the Council Gating Function")
+    add_body_p(doc, 
+        "To balance intellectual scrutiny with operational responsiveness, ARIA models the Council activation threshold as a deterministic gating function G(Q). Given an incoming analytical query Q, the concierge evaluates the risk topology across three orthogonal dimensions: potential data leakage risk L(Q) in {0, 1}, feature non-linearity and collinearity ambiguity A(Q) in [0, 1], and model architecture trade-off severity M(Q) in {0, 1}. The gating state is defined as:")
+
+    add_bullet_point(doc, "G(Q) = 1 if (L(Q) == 1 or A(Q) > 0.60 or M(Q) == 1) else 0", bold_title="Decision Rule:")
+
+    add_body_p(doc, 
+        "When G(Q) = 0, Alfred commissions the designated specialist directly in sub-second latency. When G(Q) = 1, Alfred convenes the multi-specialist adversarial roundtable before executing code. Table 2.2 formalizes this routing protocol across diverse analytical situations:")
+
+    # Table 2.2
+    t22_headers = ["Analytical Inquiry Category", "Gating State G(Q)", "Convened Council Roster", "Key Methodological Risk Addressed"]
+    t22_data = [
+        ["Direct Warehouse Extraction", "G(Q) = 0 (Direct)", "Silas (SQL Engineer)", "Query syntax efficiency, zero SELECT *"],
+        ["Basic Column Profiling & Null Audit", "G(Q) = 0 (Direct)", "Maya (Exploratory Data)", "Column data typing, basic null counts"],
+        ["Group Aggregations & Target Encoding", "G(Q) = 1 (Council)", "Priya, Leo, Elena", "Lookahead target leakage into test partition"],
+        ["Non-Linear Age / Missingness Imputation", "G(Q) = 1 (Council)", "Maya, Leo, Julian", "Variance collapse, infant distortion, MCAR vs MAR"],
+        ["Algorithm Selection (Linear vs Ensemble)", "G(Q) = 1 (Council)", "Julian, Elena, Marcus", "Overfitting, tree variance, regulatory explainability"],
+        ["Asymmetric Cost Threshold Tuning", "G(Q) = 1 (Council)", "Elena, Julian, Marcus", "Disparate impact, false positive vs negative costs"]
+    ]
+    add_styled_table(doc, t22_headers, t22_data, col_widths=[1.8, 1.2, 1.6, 1.67])
+
     add_heading_2(doc, "2.5 Invariant Enforcement: Zero Data Leakage and Clean Typography Standards")
     add_body_p(doc, 
         "ARIA enforces two critical architectural invariants across all agents and deliverables:")
@@ -149,5 +170,14 @@ def build_part2(doc):
     add_bullet_point(doc, 
         "Zero Raw LaTeX Standard: Language models routinely output raw academic LaTeX strings (e.g. $\\text{FamilySize} = \\text{SibSp} + \\text{Parch}$). Because Microsoft Word, terminal consoles, and standard Markdown viewers do not natively render LaTeX math, these equations appear as unreadable broken text. ARIA strictly enforces that all formulas and metrics be expressed as clean inline code spans (e.g. FamilySize = SibSp + Parch + 1, VIF = 1 / (1 - R²)) or standard Unicode mathematical typography (±, ², ≥, ≤, ×, ÷).",
         bold_title="2. Clean Typography Standard:")
+
+    add_heading_2(doc, "2.6 Formalization of Invariant Mathematical Contracts")
+    add_body_p(doc, 
+        "To guarantee mathematical rigor throughout the automated pipeline, all statistical computations are governed by four formal contracts:")
+
+    add_bullet_point(doc, "Multicollinearity Pruning: Variance Inflation Factor is computed as VIF_j = 1 / (1 - R_j²). Features exhibiting VIF > 10 are eliminated or projected onto orthogonal principal components via PCA.", bold_title="Contract 1 (Multicollinearity):")
+    add_bullet_point(doc, "Leak-Free Smoothed Target Encoding: For categorical entity i, the smoothed estimate is calculated as S_i = λ_i * y_mean_i + (1 - λ_i) * y_mean_global, where smoothing weight λ_i = count_i / (count_i + m). This estimate is evaluated strictly within cross-validation folds.", bold_title="Contract 2 (Target Smoothing):")
+    add_bullet_point(doc, "Overfitting Guardrail: Generalization Gap is continuously tracked as Gap = Score_train - Score_cv. If Gap > 0.10, automated hyperparameter penalties are applied (reducing tree depth, increasing leaf samples, adding L2 penalties).", bold_title="Contract 3 (Generalization Gap):")
+    add_bullet_point(doc, "Expected Value Decision Optimization: Optimal classification cutoff threshold_opt is selected by maximizing Expected Monetary Value: EV = (TP * V_TP) - (FP * C_FP) - (FN * C_FN).", bold_title="Contract 4 (Cost Optimization):")
 
     doc.add_page_break()

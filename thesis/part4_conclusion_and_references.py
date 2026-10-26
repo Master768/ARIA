@@ -10,6 +10,7 @@ def build_part4(doc):
     """
     Constructs Chapter 4: Conclusion, Future Scope, References & Appendices
     Follows VIT Chennai M.Sc. Data Science Dissertation Format.
+    Formatted to ensure Chapter 4 is exactly 2 pages, References 1 page, and Appendix 1 page.
     """
     
     # =========================================================================
@@ -19,45 +20,43 @@ def build_part4(doc):
     
     add_heading_2(doc, "4.1 Summary of Scientific Contributions")
     add_body_p(doc, 
-        "This dissertation has introduced ARIA (Autonomous Research Intelligence for Analytics), an enterprise-grade multi-agent autonomous framework designed to overcome the cognitive fragmentation, data leakage risks, and unverified hallucinations prevalent in contemporary automated data science. Through rigorous architectural design, disciplined stage-gating, and adversarial peer review, ARIA advances the state-of-the-art in four key dimensions:")
+        "This dissertation has presented ARIA (Autonomous Research Intelligence for Analytics), an enterprise-grade multi-agent autonomous framework designed to overcome the cognitive fragmentation, data leakage risks, and unverified hallucinations prevalent in contemporary automated data science. Through rigorous architectural design, disciplined stage-gating, and adversarial peer review, ARIA advances the state-of-the-art across key methodological dimensions:")
 
-    add_bullet_point(doc, "Formalization of the Eight-Specialist Lifecycle: We deconstructed the full end-to-end Data Science and Machine Learning lifecycle into eight dedicated specialist agents, each grounded in the published methodologies of renowned historical domain pioneers (Kimball, Celko, Tukey, Deming, Kaggle Grandmasters, Breiman, Rudin, and Tufte). This modular specialization completely eliminates the prompt interference and cognitive overloading that cripples monolithic LLMs.", bold_title="1. Persona-Grounded Specialization:")
+    add_bullet_point(doc, "Formalization of the Eight-Specialist Lifecycle: Deconstructed the full end-to-end data science lifecycle into eight dedicated specialist agents grounded in the published methodologies of renowned historical domain pioneers (Kimball, Celko, Tukey, Deming, Grandmasters, Breiman, Rudin, and Tufte). This modular specialization eliminates prompt interference and cognitive overloading.", bold_title="1. Persona-Grounded Specialization:")
 
-    add_bullet_point(doc, "The ARIA Council Protocol: We designed and implemented the first multi-agent adversarial peer-review mechanism in automated data science. By dynamically convening specialists to cross-examine analytical proposals from competing statistical, pipeline, modeling, and governance perspectives, ARIA intercepts and neutralizes methodological vulnerabilities—such as lookahead data leakage, high VIF collinearity, and tree-depth explosion—before any code is committed to execution.", bold_title="2. Adversarial Peer Review:")
+    add_bullet_point(doc, "The ARIA Council Protocol: Designed and implemented the first multi-agent adversarial peer-review mechanism in automated data science. By dynamically convening specialists to cross-examine analytical proposals from competing statistical, pipeline, and modeling perspectives, ARIA neutralizes lookahead leakage, collinearity, and overfitting before code execution.", bold_title="2. Adversarial Peer Review:")
 
-    add_bullet_point(doc, "Inviolable Architectural Invariants: ARIA established and enforced strict operational constraints, including a zero-leakage cross-validation isolation harness, deterministic ColumnTransformer serialization, and a zero raw LaTeX typography invariant that guarantees pristine, human-readable Word (.docx) deliverables across all platforms.", bold_title="3. Invariant Enforcement:")
-
-    add_bullet_point(doc, "The Executive Concierge Architecture: Through Alfred, our major-domo concierge, we proved that non-technical corporate leaders can commission complex, multi-agent data science pipelines using intuitive natural language while retaining full control via human confirmation gates.", bold_title="4. Concierge Orchestration:")
+    add_bullet_point(doc, "Inviolable Architectural Invariants: Established strict operational constraints, including a zero-leakage cross-validation isolation harness, deterministic ColumnTransformer serialization, and a zero raw LaTeX typography invariant guaranteeing clean Word deliverables across all platforms.", bold_title="3. Invariant Enforcement:")
 
     add_heading_2(doc, "4.2 Practical Implications for Enterprise Analytics & MLOps")
     add_body_p(doc, 
         "The empirical findings of this research offer profound practical implications for industry data science organizations:")
 
-    add_bullet_point(doc, "Democratizing Advanced Modeling Hygiene: Junior analysts and citizen data scientists frequently commit subtle data leakage errors (e.g. fitting scalers on the entire dataset) that cause disastrous production failures. ARIA automates elite-level Kaggle and MLOps hygiene, ensuring that all models deployed into production are mathematically isolated and leak-free.", bold_title="1. Elimination of Silent Failures:")
+    add_bullet_point(doc, "Elimination of Silent Failures: Automates elite-level MLOps hygiene, ensuring that all models deployed into production are mathematically isolated, cross-validated without lookahead bias, and leak-free.", bold_title="1. Modeling Hygiene:")
 
-    add_bullet_point(doc, "Accelerating Analytical Velocity: In typical enterprise settings, transitioning an analytical question from warehouse SQL extraction to an executive brief requires weeks of coordination across multiple teams. ARIA compresses this lifecycle into minutes while maintaining publication-grade documentation and governance audits.", bold_title="2. Drastic Cycle-Time Compression:")
+    add_bullet_point(doc, "Drastic Cycle-Time Compression: Compresses the journey from warehouse SQL extraction to an executive brief from weeks to minutes while maintaining publication-grade documentation.", bold_title="2. Analytical Velocity:")
 
-    add_bullet_point(doc, "Regulatory and Audit Compliance: With rising regulatory mandates regarding AI fairness and explainability (e.g. EU AI Act), ARIA's automated SHAP beeswarm attributions and cohort error slicing provide out-of-the-box model governance documentation required by compliance committees.", bold_title="3. Built-In AI Governance:")
+    add_bullet_point(doc, "Built-In AI Governance: Out-of-the-box SHAP attributions, calibration curves, and cohort error slicing satisfy emerging regulatory mandates (e.g., EU AI Act) for compliance committees.", bold_title="3. Regulatory Compliance:")
 
     add_heading_2(doc, "4.3 Limitations of Autonomous Multi-Agent Systems")
     add_body_p(doc, 
         "While ARIA represents a substantial leap forward, several technical limitations must be acknowledged:")
 
-    add_bullet_point(doc, "Computational & Token Overhead: Convening multi-agent adversarial debates across 8 specialists increases LLM API token consumption and inference latency compared to simple single-agent prompting. However, this overhead is mitigated by our dynamic gating policy, which reserves the Council strictly for complex decisions.", bold_title="1. Token Economics & Latency:")
+    add_bullet_point(doc, "Token Economics & Latency: Convening multi-agent adversarial debates across 8 specialists increases LLM token consumption and latency, though this is mitigated by our dynamic gating policy.", bold_title="1. Computational Overhead:")
 
-    add_bullet_point(doc, "Dependency on LLM Coding Competency: ARIA relies on the underlying LLM's capacity to synthesize syntactically valid Python and SQL. While self-verifying test assertions catch execution exceptions, highly non-standard database dialects can occasionally require fallback retries.", bold_title="2. Foundation Model Reasoning:")
+    add_bullet_point(doc, "Foundation Model Reasoning: ARIA relies on the LLM's capacity to synthesize valid Python and SQL; non-standard database dialects can occasionally require fallback retries.", bold_title="2. Code Synthesis Dependencies:")
 
-    add_bullet_point(doc, "Tabular Domain Focus: The current implementation is tailored primarily for structured tabular and relational data. Complex multimodal inputs (e.g. raw unstructured video streams or biomedical 3D imaging) require dedicated specialized visual agents.", bold_title="3. Data Modality Scope:")
+    add_bullet_point(doc, "Data Modality Scope: The current implementation focuses on structured tabular and relational data. Complex unstructured multimodal inputs require dedicated visual and audio agents.", bold_title="3. Tabular Focus:")
 
     add_heading_2(doc, "4.4 Future Directions & Research Roadmap")
     add_body_p(doc, 
         "We chart several promising avenues for future research:")
 
-    add_bullet_point(doc, "Episodic Knowledge Graphs & Long-Term Memory: Integrating vector-indexed graph databases to allow specialists to accumulate institutional domain memory across historical projects.", bold_title="1. Continuous Agent Memory:")
+    add_bullet_point(doc, "Continuous Agent Memory: Integrating vector-indexed graph databases to allow specialists to accumulate institutional domain memory across historical enterprise projects.", bold_title="1. Episodic Knowledge Graphs:")
 
-    add_bullet_point(doc, "Automated Production Drift Monitoring: Extending Elena's mandate to real-time streaming inference, detecting covariate shift via Kolmogorov-Smirnov tests and triggering automated model retraining.", bold_title="2. Continuous Production Monitoring:")
+    add_bullet_point(doc, "Continuous Production Monitoring: Extending Elena's mandate to streaming inference, detecting covariate shift via Kolmogorov-Smirnov tests and triggering automated model retraining.", bold_title="2. Automated Drift Monitoring:")
 
-    add_bullet_point(doc, "Causal Inference Integration: Introducing a ninth specialist agent inspired by Judea Pearl to conduct causal DAG discovery, do-calculus, and counterfactual policy simulation beyond pure statistical correlation.", bold_title="3. Causal AI Expansion:")
+    add_bullet_point(doc, "Causal AI Expansion: Introducing a dedicated specialist agent to conduct causal DAG discovery, do-calculus, and counterfactual policy simulation beyond pure correlation.", bold_title="3. Causal Inference Integration:")
 
     doc.add_page_break()
 
@@ -89,27 +88,35 @@ def build_part4(doc):
     for ref in refs:
         p_ref = doc.add_paragraph()
         p_ref.paragraph_format.line_spacing = 1.15
-        p_ref.paragraph_format.space_after = Pt(3)
+        p_ref.paragraph_format.space_after = Pt(2.5)
         p_ref.paragraph_format.left_indent = Inches(0.35)
         p_ref.paragraph_format.first_line_indent = Inches(-0.35)
         run = p_ref.add_run(ref)
         run.font.name = 'Times New Roman'
         run.font.size = Pt(10)
 
+    doc.add_page_break()
+
     # =========================================================================
     # APPENDIX
     # =========================================================================
-    add_heading_1(doc, "APPENDIX: SYSTEM PROMPTS & PIPELINE ARTIFACTS", space_before=16, space_after=8)
+    add_heading_1(doc, "APPENDIX: SYSTEM PROMPTS, MATHEMATICAL SPECIFICATIONS & ARTIFACTS")
     
-    add_heading_2(doc, "Appendix A: The ARIA Council Protocol System Kernel", space_before=10, space_after=4)
+    add_heading_2(doc, "Appendix A: The ARIA Council Protocol System Kernel")
     add_body_p(doc, 
-        "Below is the verified behavioral kernel enforcing adversarial cross-examination within the ARIA Council (ds-agent-council):")
+        "The verified operational kernel enforcing adversarial peer-review within the ARIA Council (ds-agent-council) establishes four mandatory behavioral invariants:")
 
-    add_bullet_point(doc, "Dynamic Gating: Routine data inspections bypass the Council. High-stakes feature engineering, imputation strategies, and modeling dilemmas MANDATE the Council roundtable.", bold_title="Invariant 1:")
-    add_bullet_point(doc, "Adversarial Integrity: Each specialist must provide concrete statistical, pipeline, or governance critiques. Superficial consensus is strictly prohibited.", bold_title="Invariant 2:")
-    add_bullet_point(doc, "Zero Raw LaTeX Standard: Equations and metrics must be output as clean inline code spans (e.g. FamilySize = SibSp + Parch + 1) or Unicode mathematical symbols (±, ², ≥, ≤, ×, ÷). Raw LaTeX syntax ($...$, \\text{...}) is permanently forbidden.", bold_title="Invariant 3:")
-    add_bullet_point(doc, "Human-in-the-Loop Confirmation Gate: No final Word deliverable is published without explicit user preview and sign-off.", bold_title="Invariant 4:")
+    add_bullet_point(doc, "Dynamic Gating: Routine data inspections bypass the Council. High-stakes feature engineering, imputation, and modeling dilemmas mandate the Council roundtable.", bold_title="Invariant 1 (Gating):")
+    add_bullet_point(doc, "Adversarial Integrity: Each specialist must provide concrete statistical, pipeline, or governance critiques. Superficial consensus is strictly prohibited.", bold_title="Invariant 2 (Integrity):")
+    add_bullet_point(doc, "Zero Raw LaTeX Standard: Equations and metrics must be output as clean inline code spans (e.g., FamilySize = SibSp + Parch + 1) or Unicode mathematical symbols (±, ², ≥, ≤, ×, ÷). Raw LaTeX syntax ($...$, \\text{...}) is permanently forbidden.", bold_title="Invariant 3 (Typography):")
+    add_bullet_point(doc, "Human Confirmation Gate: No final Word deliverable is published without explicit user preview and sign-off.", bold_title="Invariant 4 (Control):")
 
     add_heading_2(doc, "Appendix B: Reproducible Pipeline Execution Artifacts")
     add_body_p(doc, 
         "All experimental pipelines, Parquet extracts, trained model binaries, and Optuna databases generated during this research are archived in the ARIA repository structure (scripts/, data/, models/, reports/). The complete software artifact suite is fully reproducible via standard Python 3.10+ execution environments.")
+
+    add_heading_2(doc, "Appendix C: Verified Mathematical Formulation Dictionary")
+    add_bullet_point(doc, "FamilySize = SibSp + Parch + 1; Fare_Per_Person = Fare / max(FamilySize, Ticket_Freq); Is_Alone = 1 if FamilySize == 1 else 0.", bold_title="Feature Engineering:")
+    add_bullet_point(doc, "x_sin = sin(2 * π * t / T), x_cos = cos(2 * π * t / T); Smoothed OOF Target: S_i = λ_i * y_mean_i + (1 - λ_i) * y_mean_global.", bold_title="Encodings:")
+    add_bullet_point(doc, "VIF_j = 1 / (1 - R_j²); Brier = (1/N) * Σ (p_i - y_i)²; F_β = (1 + β²) * (Precision * Recall) / (β² * Precision + Recall).", bold_title="Model Diagnostics:")
+
