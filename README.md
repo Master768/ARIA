@@ -146,7 +146,11 @@ python -m venv venv
 # On Linux/macOS:
 source venv/bin/activate
 
+# Install core dependencies (Ultra-lean: only 4 essential packages, < 40 MB)
 pip install -r requirements.txt
+
+# (Optional) If you plan to train machine learning tournaments with Julian & Elena:
+# pip install -r requirements-ml.txt
 ```
 
 ### 3. Configure Environment

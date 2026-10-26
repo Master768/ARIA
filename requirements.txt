@@ -1,25 +1,6 @@
-# CLI & Terminal Interface
-click>=8.1.0
-rich>=13.7.0
-pyyaml>=6.0.1
-
-# High-Performance SQL & Data Ingestion
-duckdb>=0.10.0
-
-# Core Scientific & Machine Learning Stack
+# ARIA Core Essentials (Ultra-lean, fast install)
+# Only 4 core packages needed for data manipulation, SQL, charts, and Word reports
 pandas>=2.0.0
-numpy>=1.26.0
-scipy>=1.12.0
-scikit-learn>=1.4.0
-lightgbm>=4.3.0
-xgboost>=2.0.0
-optuna>=3.6.0
-shap>=0.45.0
-
-# Visualization & Reporting
-matplotlib>=3.8.0
-seaborn>=0.13.0
+duckdb>=0.10.0
 python-docx>=1.1.0
-
-# Testing & Quality Assurance
-pytest>=8.0.0
+matplotlib>=3.8.0
