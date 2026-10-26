@@ -66,35 +66,28 @@ flowchart TD
 ## 4. Repository Directory Layout
 
 ```
-Orchestra/
-├── orchestra/
-│   └── skills/                         # Portable, installable agent skills
-│       ├── docx/                       # Cloned Anthropic DOCX compilation skill
-│       ├── ds-agent-data-cleaning/
-│       ├── ds-agent-data-understanding/
-│       ├── ds-agent-feature-engineering/
-│       ├── ds-agent-model-building/
-│       ├── ds-agent-model-evaluation/
-│       ├── ds-agent-pipeline/
-│       ├── ds-agent-router/
-│       ├── ds-agent-source-locator/
-│       ├── ds-agent-sql-query-engineer/
-│       └── ds-agent-storytelling/
-├── demonstration/                      # Standalone, end-to-end demonstrations
-│   ├── pulse_analytics/                # Remote discovery & behavioral audit demo
-│   │   ├── data/                       # Synthetic sample data & schema manifests
-│   │   ├── scripts/                    # Ingestion, DuckDB joins, and report compilers
-│   │   ├── assets/                     # 300 DPI high-resolution figures
-│   │   └── reports/                    # Sample publication-grade Word deliverable
-│   └── amazon_product_rating/          # End-to-end 8-stage ML pipeline demo
-│       ├── data/                       # Amazon catalog benchmark dataset
-│       ├── scripts/                    # EDA, preprocessing, Optuna, evaluation scripts
-│       ├── assets/                     # Diagnostic distribution & residual plots
-│       └── reports/                    # Publication-grade Word deliverable
+ARIA/
+├── alfred.py               # 🎩 The Front Door (Interactive terminal concierge)
+├── AGENTS.md               # 🧠 Alfred's Identity & Auto-Connection Rules
+├── GEMINI.md               # 🧠 IDE AI Rules
+├── .agents/                # ⚙️ Workspace Engine (Auto-detected by AI IDEs)
+│   ├── skills/             # The 10 world-class agent skills + Anthropic docx
+│   └── rules/              # Workspace instruction rules
+├── demonstration/          # 📦 Isolated Demo Showcase (Pulse DB & Amazon ML)
+│   ├── pulse_analytics/    # Remote discovery & behavioral audit demo
+│   │   ├── data/           # Synthetic sample data & schema manifests
+│   │   ├── scripts/        # Ingestion, DuckDB joins, and report compilers
+│   │   ├── assets/         # 300 DPI high-resolution figures
+│   │   └── reports/        # Sample publication-grade Word deliverable
+│   └── amazon_product_rating/ # End-to-end 8-stage ML pipeline demo
+│       ├── data/           # Amazon catalog benchmark dataset
+│       ├── scripts/        # EDA, preprocessing, Optuna, evaluation scripts
+│       ├── assets/         # Diagnostic distribution & residual plots
+│       └── reports/        # Publication-grade Word deliverable
 ├── docs/
-│   ├── ARCHITECTURE.md                 # Technical architecture & invariants
-│   └── AGENT_SUITE.md                  # Full agent skill specifications
-├── requirements.txt                    # Scientific Python dependencies
-├── .env.example                        # Configuration template
-└── README.md                           # Repository overview & quickstart
+│   ├── ARCHITECTURE.md     # Technical architecture & invariants
+│   └── AGENT_SUITE.md      # Full agent skill specifications
+├── requirements.txt        # Scientific Python dependencies (Core 4 packages)
+├── .env.example            # Configuration template
+└── README.md               # Repository overview & quickstart
 ```
