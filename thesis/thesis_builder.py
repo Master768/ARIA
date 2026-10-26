@@ -41,6 +41,17 @@ def set_cell_border(cell, **kwargs):
             tcBorders.append(element)
     tcPr.append(tcBorders)
 
+def add_footer_page_number(run):
+    """Appends dynamic Word XML PAGE field into a text run."""
+    fldChar1 = parse_xml(r'<w:fldChar %s w:fldCharType="begin"/>' % nsdecls('w'))
+    instrText = parse_xml(r'<w:instrText %s xml:space="preserve"> PAGE </w:instrText>' % nsdecls('w'))
+    fldChar2 = parse_xml(r'<w:fldChar %s w:fldCharType="separate"/>' % nsdecls('w'))
+    fldChar3 = parse_xml(r'<w:fldChar %s w:fldCharType="end"/>' % nsdecls('w'))
+    run._r.append(fldChar1)
+    run._r.append(instrText)
+    run._r.append(fldChar2)
+    run._r.append(fldChar3)
+
 def create_base_document():
     doc = docx.Document()
     
@@ -52,6 +63,18 @@ def create_base_document():
     section.bottom_margin = Inches(1.0)
     section.left_margin = Inches(1.0)
     section.right_margin = Inches(1.0)
+    section.footer_distance = Inches(0.5)
+    
+    # Suppress page number on Cover Page, show on subsequent pages
+    section.different_first_page_header_footer = True
+    footer = section.footer
+    p_foot = footer.paragraphs[0]
+    p_foot.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    r_foot = p_foot.add_run()
+    r_foot.font.name = 'Times New Roman'
+    r_foot.font.size = Pt(11)
+    r_foot.font.color.rgb = RGBColor(0x37, 0x41, 0x51)
+    add_footer_page_number(r_foot)
     
     # Configure Normal Style
     style_normal = doc.styles['Normal']

@@ -216,39 +216,43 @@ def build_part1(doc):
     add_title(doc, "TABLE OF CONTENTS", space_before=18, space_after=18)
     
     toc_data = [
-        ["Declaration", "ii"],
-        ["Certificate", "iii"],
-        ["Acknowledgements", "iv"],
-        ["Abstract", "v"],
-        ["List of Figures", "vii"],
-        ["List of Tables", "viii"],
-        ["List of Abbreviations", "ix"],
-        ["CHAPTER 1: INTRODUCTION", "1"],
-        ["   1.1 Motivation: Cognitive Fragmentation in Data Science", "1"],
-        ["   1.2 Background & Related Work: The Evolution of Autonomous Agents", "2"],
-        ["   1.3 Problem Statement & Research Hypotheses", "3"],
-        ["   1.4 Research Objectives", "4"],
-        ["   1.5 Dissertation Organization", "4"],
-        ["CHAPTER 2: SYSTEM ARCHITECTURE & MULTI-AGENT DESIGN", "5"],
-        ["   2.1 Architectural Spine & Core Philosophical Invariants", "5"],
-        ["   2.2 The Executive Concierge: Alfred the Major-Domo Orchestrator", "7"],
-        ["   2.3 The Roster of Specialized Domain Agents", "8"],
-        ["   2.4 The ARIA Council Protocol: Adversarial Peer Review", "10"],
-        ["   2.5 Invariant Enforcement: Zero Leakage and Clean Typography", "12"],
-        ["CHAPTER 3: IMPLEMENTATION, METHODOLOGY & EXPERIMENTAL EVALUATION", "13"],
-        ["   3.1 Software Architecture & Reproducible Execution Pipeline", "13"],
-        ["   3.2 Experimental Setup & Benchmark Datasets", "14"],
-        ["   3.3 Multi-Agent Ablation Analysis: Single-Agent vs. Council Debate", "15"],
-        ["   3.4 Signal Extraction & High-Order Feature Engineering Impact", "16"],
-        ["   3.5 Model Tournament & Optuna Bayesian Optimization Trajectories", "17"],
-        ["   3.6 Model Governance, SHAP Attribution & Cohort Fairness Auditing", "18"],
-        ["CHAPTER 4: CONCLUSION, FUTURE SCOPE & REFERENCES", "19"],
-        ["   4.1 Summary of Scientific Contributions", "19"],
-        ["   4.2 Industry Implications & Enterprise MLOps Integration", "19"],
-        ["   4.3 Limitations & Failure Mode Analysis", "20"],
-        ["   4.4 Future Directions & Research Roadmap", "20"],
-        ["   4.5 Academic References", "21"],
-        ["APPENDIX: SYSTEM PROMPTS, MATHEMATICAL SPECIFICATIONS & ARTIFACTS", "22"]
+        ["Declaration", "2"],
+        ["Certificate", "3"],
+        ["Acknowledgements", "4"],
+        ["Abstract", "5"],
+        ["List of Figures", "8"],
+        ["List of Tables", "8"],
+        ["List of Abbreviations", "9"],
+        ["CHAPTER 1: INTRODUCTION", "10"],
+        ["   1.1 Motivation: Cognitive Fragmentation in Data Science", "10"],
+        ["   1.2 Background & Related Work: The Evolution of Autonomous Agents", "10"],
+        ["   1.3 Problem Statement & Research Hypotheses", "11"],
+        ["   1.4 Research Objectives", "12"],
+        ["   1.5 Dissertation Organization", "12"],
+        ["CHAPTER 2: SYSTEM ARCHITECTURE & MULTI-AGENT DESIGN", "14"],
+        ["   2.1 Architectural Spine & Core Philosophical Invariants", "14"],
+        ["   2.2 The Executive Concierge: Alfred the Major-Domo Orchestrator", "15"],
+        ["   2.3 The Roster of Specialized Domain Agents", "15"],
+        ["   2.4 The ARIA Council Protocol: Adversarial Peer Review", "18"],
+        ["       2.4.2 Mathematical Formalization of Council Gating Function", "19"],
+        ["   2.5 Invariant Enforcement: Zero Leakage and Clean Typography", "20"],
+        ["   2.6 Formalization of Invariant Mathematical Contracts", "21"],
+        ["CHAPTER 3: IMPLEMENTATION, METHODOLOGY & EXPERIMENTAL EVALUATION", "22"],
+        ["   3.1 Software Architecture & Reproducible Execution Pipeline", "22"],
+        ["   3.2 Experimental Setup & Benchmark Datasets", "22"],
+        ["   3.3 Multi-Agent Ablation Analysis: Single-Agent vs. Council Debate", "23"],
+        ["   3.4 Signal Extraction & High-Order Feature Engineering Impact", "24"],
+        ["       3.4.2 Intersectional Demographic Signal Analysis: Titanic Benchmark", "25"],
+        ["   3.5 Model Tournament & Optuna Bayesian Optimization Trajectories", "26"],
+        ["       3.5.2 Hyperparameter Topologies & Optuna Trajectories", "26"],
+        ["   3.6 Model Governance, SHAP Attribution & Cohort Fairness Auditing", "27"],
+        ["CHAPTER 4: CONCLUSION, FUTURE SCOPE & REFERENCES", "28"],
+        ["   4.1 Summary of Scientific Contributions", "28"],
+        ["   4.2 Practical Implications for Enterprise Analytics & MLOps", "28"],
+        ["   4.3 Limitations & Failure Mode Analysis", "29"],
+        ["   4.4 Future Directions & Research Roadmap", "29"],
+        ["   4.5 Academic References", "30"],
+        ["APPENDIX: SYSTEM PROMPTS, MATHEMATICAL SPECIFICATIONS & ARTIFACTS", "31"]
     ]
     add_styled_table(doc, ["Section Title", "Page Number"], toc_data, col_widths=[5.0, 1.27])
 
@@ -257,25 +261,26 @@ def build_part1(doc):
     # List of Figures & Tables
     add_title(doc, "LIST OF FIGURES", space_before=18, space_after=14)
     figs_data = [
-        ["Figure 2.1", "High-Level Architecture of ARIA End-to-End Orchestration Framework", "6"],
-        ["Figure 2.2", "Sequence Interaction Diagram of the ARIA Council Peer Review Roundtable", "11"],
-        ["Figure 3.1", "Directory Structure and Parquet-Driven Handoff Pipeline", "14"],
-        ["Figure 3.2", "Optuna Bayesian Optimization Hyperband Convergence Trajectory", "17"],
-        ["Figure 3.3", "Global SHAP Beeswarm Summary Plot for Holdout Test Inference", "18"],
-        ["Figure 3.4", "Receiver Operating Characteristic (ROC) and Precision-Recall Curves", "18"]
+        ["Figure 2.1", "High-Level Architecture of ARIA End-to-End Orchestration Framework", "14"],
+        ["Figure 2.2", "Sequence Interaction Diagram of the ARIA Council Peer Review Roundtable", "18"],
+        ["Figure 3.1", "Directory Structure and Parquet-Driven Handoff Pipeline", "22"],
+        ["Figure 3.2", "Optuna Bayesian Optimization Hyperband Convergence Trajectory", "26"],
+        ["Figure 3.3", "Global SHAP Beeswarm Summary Plot for Holdout Test Inference", "27"],
+        ["Figure 3.4", "Receiver Operating Characteristic (ROC) and Precision-Recall Curves", "27"]
     ]
     add_styled_table(doc, ["Figure No.", "Figure Caption", "Page"], figs_data, col_widths=[1.2, 4.0, 1.07])
 
     add_title(doc, "LIST OF TABLES", space_before=18, space_after=14)
     tables_data = [
-        ["Table 1.1", "Comparison of Existing Autonomous Agent Paradigms in Data Science", "2"],
-        ["Table 2.1", "ARIA Specialist Roster, Mentor Philosophies, and Primary Responsibilities", "9"],
-        ["Table 2.2", "Dynamic Gating Protocol & Routing Decision Matrix", "11"],
-        ["Table 3.1", "Benchmark Dataset Characteristics and Dimensional Geometry", "14"],
-        ["Table 3.2", "Ablation Study: Single LLM vs Standard AutoML vs ARIA Council", "15"],
-        ["Table 3.3", "Feature Importance, Multicollinearity (VIF), and Mutual Information Lift", "16"],
-        ["Table 3.4", "Comprehensive Multi-Model Algorithm Tournament Performance", "17"],
-        ["Table 3.5", "Optuna Bayesian Optimization Search Hypercube Bounds", "18"]
+        ["Table 1.1", "Comparison of Existing Autonomous Agent Paradigms in Data Science", "11"],
+        ["Table 2.1", "ARIA Specialist Roster, Mentor Philosophies, and Primary Responsibilities", "17"],
+        ["Table 2.2", "Dynamic Gating Protocol & Routing Decision Matrix", "19"],
+        ["Table 3.1", "Benchmark Dataset Characteristics and Dimensional Geometry", "22"],
+        ["Table 3.2", "Ablation Study: Single LLM vs Standard AutoML vs ARIA Council", "23"],
+        ["Table 3.3", "Feature Importance, Multicollinearity (VIF), and Mutual Information Lift", "24"],
+        ["Table 3.3B", "Titanic Demographic Survival Interaction Matrix", "25"],
+        ["Table 3.4", "Comprehensive Multi-Model Algorithm Tournament Performance", "26"],
+        ["Table 3.5", "Optuna Bayesian Optimization Search Hypercube Bounds", "26"]
     ]
     add_styled_table(doc, ["Table No.", "Table Description", "Page"], tables_data, col_widths=[1.2, 4.0, 1.07])
 
