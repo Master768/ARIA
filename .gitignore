@@ -29,6 +29,7 @@ sandbox/temp_query.py
 .agent/
 .agents/*
 !.agents/skills/
+!.agents/rules/
 .claude/
 .codex/
 .cursor/
