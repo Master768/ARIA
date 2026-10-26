@@ -97,17 +97,17 @@ sequenceDiagram
     participant Marcus as Marcus (Story / Tufte)
 
     User->>Alfred: Submits Complex Analytical Goal
-    Alfred->>Alfred: Evaluates Gating: Complex / High-Stakes -> Convenes Council
-    Note over Alfred,Marcus: 🏛️ The ARIA Council Roundtable (Adversarial Cross-Examination)
+    Alfred->>Alfred: Evaluates Gating: Complex / High-Stakes — Convenes Council
+    Note over Alfred,Marcus: The ARIA Council Roundtable (Adversarial Cross-Examination)
     Alfred->>Priya: Tables feature transformation proposal
     Priya-->>Alfred: Proposes target-encoded family survival rates
-    Leo->>Priya: Attacks lookahead data leakage; demands Out-of-Fold (OOF) cross-validation
-    Maya->>Priya: Challenges age imputation; mandates Title + Parch conditional grouping
-    Elena->>Priya: Audits surname grouping; reveals false-positive family links across strangers
-    Julian->>Priya: Flags tree overfitting on small families; enforces regularized discrete bins
+    Leo->>Priya: Attacks lookahead data leakage, demands Out-of-Fold (OOF) cross-validation
+    Maya->>Priya: Challenges age imputation, mandates Title + Parch conditional grouping
+    Elena->>Priya: Audits surname grouping, reveals false-positive family links across strangers
+    Julian->>Priya: Flags tree overfitting on small families, enforces regularized discrete bins
     Marcus->>Priya: Demands intuitive business terminology for C-suite report
     Alfred->>Alfred: Synthesizes debate into hardened, leak-free consensus
-    Alfred-->>User: Delivers Council findings & battle-tested action plan
+    Alfred-->>User: Delivers Council findings and battle-tested action plan
 ```
 
 ---
