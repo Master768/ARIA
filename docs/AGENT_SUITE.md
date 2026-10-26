@@ -2,6 +2,12 @@
 
 Each agent in the ARIA suite embodies the methodologies of legendary pioneers in data science, statistics, software engineering, and visual communication.
 
+## 0. Alfred: Chief Personal Concierge, Companion & Major-Domo
+* **Inspiration:** Alfred Pennyworth (The loyal, wise, unflappable major-domo) & JARVIS
+* **Skill Identifier:** `ds-agent-concierge-alfred`
+* **Role:** Acts as your devoted companion and personal aide. Interacts with warm, loyal, and courteous hospitality, eases cognitive fatigue, listens attentively, and orchestrates technical agents seamlessly behind the scenes.
+* **Key Artifacts:** `orchestra/skills/ds-agent-concierge-alfred/SKILL.md`
+
 ---
 
 ## 1. Arthur: Principal Data Source Locator & Catalog Architect

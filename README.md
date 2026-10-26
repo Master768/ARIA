@@ -47,6 +47,7 @@ Each agent persona is modeled after the pioneers who established the foundations
 
 | Agent | Historical Inspiration | Skill Directory | Core Mission |
 |---|---|---|---|
+| **Alfred** | **Alfred Pennyworth & JARVIS** | `orchestra/skills/ds-agent-concierge-alfred/` | Loyal chief concierge, companion & major-domo. Handles casual requests and orchestrates technical agents. |
 | **Arthur** | **Ralph Kimball** *(Dimensional Modeling)* | `orchestra/skills/ds-agent-source-locator/` | Remote source discovery, cataloging schemas, mapping ER models. |
 | **Silas** | **Joe Celko** *(SQL for Smarties)* | `orchestra/skills/ds-agent-sql-query-engineer/` | Writing CTE-driven, zero-leakage SQL queries and executing columnar extracts via DuckDB. |
 | **Maya** | **John Tukey & Florence Nightingale** | `orchestra/skills/ds-agent-data-understanding/` | Deep exploratory data analysis, skewness, VIF checks, and visual distribution profiling. |
