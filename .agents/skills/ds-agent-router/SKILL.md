@@ -43,3 +43,10 @@ When a user submits a query, analyze their intent and automatically dispatch to 
    - Stop and wait for the user's response.
 3. **Trigger DOCX Generation Only on 'Yes':**
    - Once the user confirms (e.g. *"yes"*, *"proceed"*, *"create the docx"*), activate **Marcus** and the **Anthropic DOCX Skill** (`docx`) to build the document.
+
+---
+
+## 3. Formatting Standard: Zero Raw LaTeX
+- **NEVER** output raw LaTeX expressions (such as `$...$`, `\text{...}`, `\frac{...}`) in any agent response or document preview.
+- Standard Markdown viewers, chat interfaces, and Word documents do not render LaTeX natively.
+- Format all formulas, calculations, and mathematical transformations as clean inline code spans (e.g., `FamilySize = SibSp + Parch + 1`, `ratio = x1 / (x2 + 1e-5)`) or standard Unicode symbols (`±`, `²`, `≥`, `≤`, `×`, `÷`, `Δ`).

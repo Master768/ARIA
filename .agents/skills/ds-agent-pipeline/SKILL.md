@@ -66,3 +66,4 @@ The **Enterprise Data Science Pipeline Orchestrator** automates and coordinates 
 3. **Optimized SQL Execution:** Zero `SELECT *`, sargable filters, and zero division-by-zero crashes.
 4. **Independent Audit Gate:** No model is marked production-ready without Elena's evaluation sign-off.
 5. **Human Confirmation Before Publishing:** No final Word `.docx` report is generated without explicit user approval.
+6. **Zero Raw LaTeX:** All mathematical relationships, metrics, and feature transformations are formatted as clean inline code spans (e.g. `FamilySize = SibSp + Parch + 1`) or clean Unicode text. Raw LaTeX (`$...$`, `\text{...}`, `\frac{...}`) is strictly prohibited across all reports, slides, and chat outputs.
