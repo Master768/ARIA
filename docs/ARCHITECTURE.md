@@ -68,8 +68,8 @@ flowchart TD
 ```
 Orchestra/
 ├── orchestra/
-│   └── skills/                 # Portable, installable agent skills
-│       ├── docx/               # Cloned Anthropic DOCX compilation skill
+│   └── skills/                         # Portable, installable agent skills
+│       ├── docx/                       # Cloned Anthropic DOCX compilation skill
 │       ├── ds-agent-data-cleaning/
 │       ├── ds-agent-data-understanding/
 │       ├── ds-agent-feature-engineering/
@@ -80,16 +80,21 @@ Orchestra/
 │       ├── ds-agent-source-locator/
 │       ├── ds-agent-sql-query-engineer/
 │       └── ds-agent-storytelling/
-├── data/
-│   ├── raw/                    # Landed datasets from MongoDB / SQL / External
-│   ├── processed/              # Cleaned, imputed, split datasets
-│   └── features/               # High-signal feature matrices
-├── models/                     # Serialized champion models & evaluation benchmarks
-├── reports/
-│   ├── assets/                 # High-resolution (300 DPI) charts and visual plots
-│   ├── drafts/                 # Working markdown summaries
-│   └── published/              # Official publication-grade Word (.docx) deliverables
-├── scripts/                    # Fully reproducible standalone execution scripts
-├── requirements.txt            # Scientific Python dependencies
-└── README.md                   # Repository overview & quickstart
+├── demonstration/                      # Standalone, end-to-end demonstrations
+│   ├── pulse_analytics/                # Remote discovery & behavioral audit demo
+│   │   ├── data/                       # Synthetic sample data & schema manifests
+│   │   ├── scripts/                    # Ingestion, DuckDB joins, and report compilers
+│   │   ├── assets/                     # 300 DPI high-resolution figures
+│   │   └── reports/                    # Sample publication-grade Word deliverable
+│   └── amazon_product_rating/          # End-to-end 8-stage ML pipeline demo
+│       ├── data/                       # Amazon catalog benchmark dataset
+│       ├── scripts/                    # EDA, preprocessing, Optuna, evaluation scripts
+│       ├── assets/                     # Diagnostic distribution & residual plots
+│       └── reports/                    # Publication-grade Word deliverable
+├── docs/
+│   ├── ARCHITECTURE.md                 # Technical architecture & invariants
+│   └── AGENT_SUITE.md                  # Full agent skill specifications
+├── requirements.txt                    # Scientific Python dependencies
+├── .env.example                        # Configuration template
+└── README.md                           # Repository overview & quickstart
 ```
