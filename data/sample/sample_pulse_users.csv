@@ -1,0 +1,6 @@
+_id,name,email,password,persona,onboardingComplete,createdAt,updatedAt,__v,goalPersona,lastBalancedDate,streakCount
+usr_001,Alex Morgan,alex.morgan@example.com,[REDACTED],balanced,True,2026-03-01T08:00:00Z,2026-03-28T18:00:00Z,0,Balanced Optimizer,2026-03-28,21
+usr_002,Jordan Kim,jordan.kim@example.com,[REDACTED],focused,True,2026-03-05T09:30:00Z,2026-03-28T18:00:00Z,0,Deep Worker,2026-03-27,8
+usr_003,Sam Rivera,sam.rivera@example.com,[REDACTED],balanced,True,2026-03-10T11:15:00Z,2026-03-28T18:00:00Z,0,Steady Achiever,2026-03-26,5
+usr_004,Taylor Brooks,taylor.b@example.com,[REDACTED],high_achiever,True,2026-03-12T14:20:00Z,2026-03-28T18:00:00Z,0,Sprint Finisher,2026-03-25,1
+usr_005,Morgan Patel,morgan.p@example.com,[REDACTED],balanced,True,2026-03-15T16:45:00Z,2026-03-28T18:00:00Z,0,Balanced Optimizer,2026-03-24,0

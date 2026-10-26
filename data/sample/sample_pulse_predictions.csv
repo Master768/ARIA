@@ -1,0 +1,6 @@
+_id,userId,logId,productivityScore,burnoutRisk,burnoutConfidence,primaryConfidence,persona,clusterId,date,createdAt,updatedAt,__v,isEdited
+pred_001,usr_001,log_001,92,Low,"{""High"": 0, ""Low"": 0.95, ""Medium"": 0.05}",1,Balanced Optimizer,0,2026-03-28T18:00:00Z,2026-03-28T18:00:00Z,2026-03-28T18:00:00Z,0,False
+pred_002,usr_002,log_002,96,Low,"{""High"": 0, ""Low"": 0.98, ""Medium"": 0.02}",1,Deep Worker,0,2026-03-28T18:00:00Z,2026-03-28T18:00:00Z,2026-03-28T18:00:00Z,0,False
+pred_003,usr_003,log_003,78,Low,"{""High"": 0.1, ""Low"": 0.8, ""Medium"": 0.1}",1,Steady Achiever,1,2026-03-28T18:00:00Z,2026-03-28T18:00:00Z,2026-03-28T18:00:00Z,0,False
+pred_004,usr_004,log_004,58,Medium,"{""High"": 0.25, ""Low"": 0.15, ""Medium"": 0.6}",1,Sprint Finisher,2,2026-03-28T18:00:00Z,2026-03-28T18:00:00Z,2026-03-28T18:00:00Z,0,False
+pred_005,usr_005,log_005,42,High,"{""High"": 0.85, ""Low"": 0.05, ""Medium"": 0.1}",1,Vulnerable Cluster,3,2026-03-28T18:00:00Z,2026-03-28T18:00:00Z,2026-03-28T18:00:00Z,0,False

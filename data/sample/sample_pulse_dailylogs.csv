@@ -1,0 +1,6 @@
+_id,userId,sleepHours,studyHours,screenTimeHours,exerciseMins,moodScore,stressLevel,caffeineIntake,waterLitres,deepFocusBlocks,socialMediaMins,focus_duration_mins,focus_quality_score,distraction_level,distraction_level_encoded,has_focus_session,is_completed,date,dayOfWeek,isWeekend,createdAt,updatedAt,__v,dayKey
+log_001,usr_001,7.5,5.0,3.5,30,4,2,2,2,3,45,180,4,Low,1,True,True,2026-03-28T00:00:00Z,Saturday,True,2026-03-28T18:00:00Z,2026-03-28T18:00:00Z,0,2026-03-28
+log_002,usr_002,8.0,6.0,3.0,45,5,1,1,3,4,30,240,5,None,0,True,True,2026-03-28T00:00:00Z,Saturday,True,2026-03-28T18:00:00Z,2026-03-28T18:00:00Z,0,2026-03-28
+log_003,usr_003,6.5,4.0,5.0,20,3,3,3,2,2,75,120,3,Medium,2,True,True,2026-03-28T00:00:00Z,Saturday,True,2026-03-28T18:00:00Z,2026-03-28T18:00:00Z,0,2026-03-28
+log_004,usr_004,5.0,3.0,7.5,10,2,4,4,1,1,120,60,2,High,3,True,True,2026-03-28T00:00:00Z,Saturday,True,2026-03-28T18:00:00Z,2026-03-28T18:00:00Z,0,2026-03-28
+log_005,usr_005,4.5,2.0,8.0,0,2,5,4,1,0,150,0,1,High,3,False,True,2026-03-28T00:00:00Z,Saturday,True,2026-03-28T18:00:00Z,2026-03-28T18:00:00Z,0,2026-03-28

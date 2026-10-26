@@ -1,9 +1,0 @@
-[
-  {
-    "query": "compute player goals correlation",
-    "strategy": "Pearson correlation",
-    "dataset": "data/fifa.csv",
-    "confidence": 0.95,
-    "timestamp": 1786175898.3009844
-  }
-]

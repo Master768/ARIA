@@ -4,8 +4,9 @@ __pycache__/
 *.pyo
 *.pyd
 
-# Environment variables & API keys
+# Environment variables, credentials & API keys
 .env
+*.env
 groq_api_keys.txt
 
 # Virtual environments
@@ -17,12 +18,11 @@ ENV/
 # Pytest and testing cache
 .pytest_cache/
 
-# Agent caches and logs
+# Agent caches, temporary logs & internal configs
 logs/
 ppt/
 reports/*.md
 reports/*.json
-reports/*.docx
 reports/manifest.json
 config/task_state.json
 sandbox/temp_query.py
@@ -35,6 +35,13 @@ sandbox/temp_query.py
 .impeccable/
 _bmad/
 _bmad-output/
+
+# Live database extractions & PII datasets (Public repo safety)
+data/raw/pulse_*
+data/user_performance_summary.csv
+data/processed/*.parquet
+data/features/*.parquet
+models/*.joblib
 
 # OS files
 .DS_Store

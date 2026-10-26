@@ -1,9 +1,0 @@
-{
-  "lessons": [
-    {
-      "error_type": "KEY_ERROR",
-      "root_cause": "",
-      "lesson": "On 'print(df['performanceScore'])', ensure correct target variables and schema types."
-    }
-  ]
-}
